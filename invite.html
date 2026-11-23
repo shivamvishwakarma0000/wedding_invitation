@@ -999,21 +999,21 @@
     document.getElementById('ty-guest-name').textContent = guestName;
 
         // Audio Auto-Control (Infinite loop, pause on tab hide/close)
-    const weddingAudio = new RoyalWeddingAudio();
+    window.weddingAudio = new RoyalWeddingAudio();
 
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        if (weddingAudio) weddingAudio.pause();
+        if (window.weddingAudio) window.weddingAudio.pause();
       } else {
-        if (isEnvelopeOpened && weddingAudio) weddingAudio.play();
+        if (isEnvelopeOpened && window.weddingAudio) window.weddingAudio.play();
       }
     });
 
     window.addEventListener('pagehide', () => {
-      if (weddingAudio) weddingAudio.pause();
+      if (window.weddingAudio) window.weddingAudio.pause();
     });
     window.addEventListener('beforeunload', () => {
-      if (weddingAudio) weddingAudio.pause();
+      if (window.weddingAudio) window.weddingAudio.pause();
     });
 
         // 3. Open Envelope Trigger & UNBLOCK SCROLL INSTANTLY
@@ -1039,8 +1039,7 @@
 
       // 2. Play Kudmayi music on direct user tap
       try {
-        if (window.weddingAudio) weddingAudio.play();
-        
+        if (window.weddingAudio) window.weddingAudio.play();
       } catch (err) {
         console.warn('Audio play notice:', err);
       }

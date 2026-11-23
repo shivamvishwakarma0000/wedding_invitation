@@ -400,8 +400,10 @@
       const gAddr = addrField.value.trim() || 'सपरिवार';
 
       // Link always points to index.html root
-      const baseUrl = window.location.origin + window.location.pathname.replace('create.html', '').replace('generator.html', '').replace(/\/$/, '');
-      const fullUrl = `${baseUrl}?to=${encodeURIComponent(gName)}&addr=${encodeURIComponent(gAddr)}`;
+      const origin = (window.location.origin && window.location.origin !== 'null' && !window.location.protocol.startsWith('file')) 
+        ? window.location.origin 
+        : 'https://jaswant-lal.netlify.app';
+      const fullUrl = `${origin}/?to=${encodeURIComponent(gName)}&addr=${encodeURIComponent(gAddr)}`;
       urlField.value = fullUrl;
 
       // Short, sweet, attractive WhatsApp invitation message with down arrow
