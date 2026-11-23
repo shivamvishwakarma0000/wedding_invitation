@@ -1,32 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Wedding Invitation | Shivani & Saurabh</title>
+  <title>Wedding Invitation | शिवानी संग सौरभ</title>
   
-  <!-- Premium Fonts -->
+  <!-- Premium Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Great+Vibes&family=Montserrat:wght@400;500;600;700&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
   
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
-      --primary-burgundy: #380711;
-      --burgundy-card: #4a0d18;
-      --burgundy-light: #6a1324;
+      --burgundy: #380711;
+      --burgundy-light: #520b19;
       --gold: #d4af37;
       --gold-light: #f7e7be;
       --gold-bright: #ffe082;
       --gold-dark: #8c6d1d;
       --ivory: #faf7f2;
-      --cream-bg: #f5efe6;
+      --cream: #f4ecdc;
       --text-dark: #2a140d;
       --text-muted: #5e433a;
-      --border-gold: rgba(212, 175, 55, 0.45);
     }
 
     * {
@@ -47,8 +45,7 @@
       overflow-x: hidden;
     }
 
-    /* Outer Wrapper for all devices */
-    .viewport-wrapper {
+    .main-viewport {
       width: 100%;
       max-width: 500px;
       min-height: 100vh;
@@ -58,7 +55,6 @@
       overflow-x: hidden;
     }
 
-    /* Floating Petals Canvas */
     #petals-canvas {
       position: fixed;
       top: 0;
@@ -69,53 +65,80 @@
       z-index: 99;
     }
 
-    /* Floating Music Control */
-    .music-player-btn {
+    /* Top Floating Action Bar */
+    .top-actions-bar {
       position: fixed;
-      top: 16px;
-      right: 16px;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      padding: 0 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .top-actions-bar > * {
+      pointer-events: auto;
+    }
+
+    .btn-create-invites {
       background: rgba(45, 6, 14, 0.92);
       border: 1.5px solid var(--gold);
-      padding: 6px 12px;
+      color: var(--gold-bright);
+      padding: 7px 14px;
       border-radius: 25px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: var(--gold-light);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      z-index: 1000;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+    }
+
+    .music-pill-btn {
+      background: rgba(45, 6, 14, 0.92);
+      border: 1.5px solid var(--gold);
+      color: var(--gold-bright);
+      padding: 7px 12px;
+      border-radius: 25px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       backdrop-filter: blur(8px);
-      transition: all 0.3s ease;
     }
-    .music-bars {
+    .music-wave {
       display: flex;
       align-items: flex-end;
       gap: 3px;
-      height: 16px;
+      height: 14px;
     }
-    .music-bar {
+    .wave-line {
       width: 2.5px;
       background: var(--gold-bright);
       border-radius: 2px;
       height: 4px;
     }
-    .music-player-btn.playing .music-bar:nth-child(1) { animation: barMove 0.8s ease-in-out infinite alternate; }
-    .music-player-btn.playing .music-bar:nth-child(2) { animation: barMove 0.6s ease-in-out infinite alternate 0.2s; }
-    .music-player-btn.playing .music-bar:nth-child(3) { animation: barMove 1.0s ease-in-out infinite alternate 0.4s; }
-    @keyframes barMove {
+    .music-pill-btn.playing .wave-line:nth-child(1) { animation: wavePulse 0.8s ease-in-out infinite alternate; }
+    .music-pill-btn.playing .wave-line:nth-child(2) { animation: wavePulse 0.6s ease-in-out infinite alternate 0.2s; }
+    .music-pill-btn.playing .wave-line:nth-child(3) { animation: wavePulse 1.0s ease-in-out infinite alternate 0.4s; }
+    @keyframes wavePulse {
       0% { height: 3px; }
-      100% { height: 16px; }
+      100% { height: 14px; }
     }
 
     /* =========================================
-       SCREEN 1: LUXURY ROYAL ENVELOPE OPENING
+       SCREEN 1: LUXURY ENVELOPE OPENING
        ========================================= */
-    #envelope-cover-screen {
+    #envelope-screen {
       position: fixed;
       top: 0;
       left: 0;
@@ -127,30 +150,29 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 16px;
       transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    #envelope-cover-screen.opened {
+    #envelope-screen.opened {
       opacity: 0;
       transform: scale(1.1) translateY(-20px);
       pointer-events: none;
     }
 
-    .luxury-envelope-box {
+    .envelope-box {
       width: 100%;
-      max-width: 400px;
-      background: linear-gradient(145deg, #420813 0%, #29030b 100%);
+      max-width: 410px;
+      background: linear-gradient(145deg, #420813 0%, #28030a 100%);
       border: 2px solid var(--gold);
       border-radius: 18px;
-      padding: 32px 20px;
+      padding: 34px 22px;
       text-align: center;
       color: var(--ivory);
       position: relative;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(212, 175, 55, 0.25);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(212, 175, 55, 0.3);
       cursor: pointer;
-      overflow: hidden;
     }
-    .luxury-envelope-box::before {
+    .envelope-box::before {
       content: '';
       position: absolute;
       top: 10px;
@@ -162,13 +184,13 @@
       pointer-events: none;
     }
 
-    .env-top-tagline {
+    .env-tag {
       font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      letter-spacing: 3px;
+      font-size: 0.82rem;
+      letter-spacing: 2.5px;
       color: var(--gold-light);
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .env-shloka {
       font-size: 0.88rem;
@@ -177,148 +199,145 @@
       font-family: 'Rozha One', serif;
     }
 
-    /* Real Ganesha 3D Medallion */
-    .real-ganesha-ring {
-      width: 96px;
-      height: 96px;
+    /* Enhanced Real Ganesha Medallion */
+    .ganesha-frame {
+      width: 98px;
+      height: 98px;
       margin: 0 auto 16px auto;
       border-radius: 50%;
-      border: 3px solid var(--gold);
+      border: 3.5px solid var(--gold);
       background: radial-gradient(circle, #5a101d 0%, #280209 100%);
-      box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 15px rgba(0,0,0,0.7);
-      padding: 6px;
+      box-shadow: 0 0 28px rgba(212, 175, 55, 0.65), inset 0 0 15px rgba(0,0,0,0.7);
+      padding: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .real-ganesha-ring img {
+    .ganesha-frame img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       border-radius: 50%;
-      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8));
+      object-fit: cover;
     }
 
-    .env-couple-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.85rem;
+    .env-title {
+      font-family: 'Cinzel', 'Rozha One', serif;
+      font-size: 1.95rem;
       color: var(--gold-light);
       font-weight: 700;
       margin-bottom: 4px;
       text-shadow: 0 2px 10px rgba(0,0,0,0.6);
     }
-    .env-wedding-date {
+    .env-sub-date {
       display: inline-block;
       border: 1px solid var(--gold);
-      padding: 4px 16px;
+      padding: 4px 18px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: #ffe082;
       margin-bottom: 22px;
       letter-spacing: 1px;
     }
 
-    /* Guest Name Box */
-    .env-guest-box {
+    /* Guest Space on Envelope */
+    .env-guest-card {
       background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(212, 175, 55, 0.35);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 24px;
+      border: 1px solid rgba(212, 175, 55, 0.38);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 26px;
       text-align: left;
     }
-    .env-guest-lbl {
-      font-size: 0.72rem;
-      text-transform: uppercase;
+    .env-guest-title {
+      font-size: 0.75rem;
       letter-spacing: 1.5px;
       color: var(--gold-light);
-      display: block;
-      margin-bottom: 4px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
       font-family: 'Cinzel', serif;
+      display: block;
     }
     .env-guest-name {
       font-family: 'Rozha One', 'Montserrat', serif;
-      font-size: 1.35rem;
+      font-size: 1.38rem;
       color: #ffffff;
-      line-height: 1.25;
-      margin-bottom: 3px;
+      line-height: 1.3;
+      margin-bottom: 4px;
     }
     .env-guest-addr {
-      font-size: 0.85rem;
-      color: #e0d0c5;
+      font-size: 0.88rem;
+      color: #e2d2c8;
     }
 
-    .btn-open-invite {
+    .btn-open-card {
       background: linear-gradient(135deg, #d4af37 0%, #aa820a 100%);
       color: #2b040a;
       font-family: 'Cinzel', serif;
       font-weight: 700;
-      font-size: 0.95rem;
-      padding: 13px 30px;
+      font-size: 0.98rem;
+      padding: 14px 32px;
       border-radius: 30px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
+      box-shadow: 0 6px 25px rgba(212, 175, 55, 0.55);
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      animation: pulseOpen 2.2s infinite;
+      animation: pulseBtn 2.2s infinite;
     }
-    @keyframes pulseOpen {
+    @keyframes pulseBtn {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.04); }
     }
 
     /* =========================================
-       INSIDE INVITATION MAIN CONTENT
+       INSIDE INVITATION BODY
        ========================================= */
-    .invitation-body {
-      padding: 24px 18px 80px 18px;
-      position: relative;
+    .invite-container {
+      padding: 60px 18px 80px 18px;
     }
 
-    /* Top Personalized Welcome Banner */
-    .personalized-welcome-banner {
+    /* Personalized Welcome */
+    .welcome-card {
       background: linear-gradient(135deg, #3d0712 0%, #250209 100%);
       border: 1.5px solid var(--gold);
       border-radius: 16px;
-      padding: 20px 16px;
+      padding: 22px 18px;
       text-align: center;
       color: #ffffff;
       margin-bottom: 24px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      position: relative;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     }
-    .p-welcome-sub {
+    .welcome-card-sub {
       font-family: 'Cinzel', serif;
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       letter-spacing: 2px;
       color: var(--gold-light);
       text-transform: uppercase;
     }
-    .p-welcome-name {
+    .welcome-card-name {
       font-family: 'Rozha One', 'Montserrat', serif;
-      font-size: 1.5rem;
+      font-size: 1.55rem;
       color: #ffffff;
       margin: 6px 0;
     }
-    .p-welcome-addr {
-      font-size: 0.88rem;
+    .welcome-card-addr {
+      font-size: 0.9rem;
       color: var(--gold-bright);
     }
 
     /* Section Cards */
-    .card-section {
+    .section-card {
       background: #ffffff;
-      border: 1.5px solid var(--border-gold);
+      border: 1.5px solid rgba(212, 175, 55, 0.42);
       border-radius: 18px;
-      padding: 24px 18px;
+      padding: 26px 18px;
       margin-bottom: 24px;
       text-align: center;
       position: relative;
       box-shadow: 0 8px 25px rgba(56, 7, 17, 0.06);
     }
-    .card-section::after {
+    .section-card::after {
       content: '';
       position: absolute;
       top: 6px;
@@ -330,87 +349,83 @@
       pointer-events: none;
     }
 
-    /* Invocations */
-    .shloka-box {
-      background: #fbf6ec;
-      border: 1px solid #e7d5ab;
-      border-radius: 12px;
-      padding: 16px 12px;
-      margin: 14px 0;
+    .bilingual-header {
+      margin-bottom: 18px;
     }
-    .shloka-text {
+    .bilingual-header .hi-title {
+      font-family: 'Rozha One', serif;
+      font-size: 1.7rem;
+      color: var(--burgundy);
+      margin-bottom: 2px;
+    }
+    .bilingual-header .en-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      letter-spacing: 2px;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+    }
+
+    /* Shlokas */
+    .shloka-box {
+      background: #fcf7ee;
+      border: 1px solid #ebd9b5;
+      border-radius: 12px;
+      padding: 16px 14px;
+      margin: 14px 0;
       color: #5c1f28;
       font-family: 'Rozha One', serif;
       font-size: 0.95rem;
       line-height: 1.65;
     }
 
-    /* Couple Presentation */
-    .section-eng-title {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.8rem;
-      color: var(--primary-burgundy);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .section-sub-title {
-      font-family: 'Cinzel', serif;
-      font-size: 0.8rem;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .couple-column {
+    /* Couple Cards */
+    .couple-stack {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      margin-bottom: 10px;
     }
     .profile-card {
       background: #fffdfa;
       border: 1.5px solid #ebd9b5;
       border-radius: 16px;
-      padding: 18px 14px;
-      position: relative;
+      padding: 20px 16px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.03);
     }
-    .role-badge {
+    .profile-badge {
       display: inline-block;
-      background: var(--primary-burgundy);
+      background: var(--burgundy);
       color: var(--gold-light);
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 700;
       letter-spacing: 1px;
       padding: 3px 14px;
       border-radius: 20px;
-      text-transform: uppercase;
       margin-bottom: 8px;
     }
-    .couple-person-name {
+    .profile-name {
       font-family: 'Cinzel', 'Rozha One', serif;
-      font-size: 1.55rem;
-      color: var(--primary-burgundy);
+      font-size: 1.6rem;
+      color: var(--burgundy);
       font-weight: 700;
       margin-bottom: 6px;
     }
-    .couple-lineage {
-      font-size: 0.86rem;
+    .profile-lineage {
+      font-size: 0.88rem;
       color: #553e36;
-      line-height: 1.6;
+      line-height: 1.65;
     }
-    .couple-lineage strong {
+    .profile-lineage strong {
       color: #2b140d;
     }
 
-    .wedding-knot {
+    .knot-circle {
       width: 48px;
       height: 48px;
       border-radius: 50%;
       background: #ffffff;
       border: 2px solid var(--gold);
-      color: var(--primary-burgundy);
+      color: var(--burgundy);
       font-family: 'Rozha One', serif;
       font-size: 1.25rem;
       display: flex;
@@ -421,10 +436,8 @@
       box-shadow: 0 3px 10px rgba(0,0,0,0.08);
     }
 
-    /* =========================================
-       PULL TO REVEAL ROYAL SCROLL
-       ========================================= */
-    .scroll-container {
+    /* Pull to Reveal Scroll */
+    .scroll-box {
       background: linear-gradient(180deg, #f8f1e2 0%, #fffcf5 100%);
       border: 1.5px solid var(--gold);
       border-radius: 18px;
@@ -437,34 +450,31 @@
       height: 18px;
       background: linear-gradient(90deg, #aa820a 0%, #ffe285 50%, #aa820a 100%);
       border-radius: 9px;
-      position: relative;
-      z-index: 10;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .scroll-parchment {
+    .scroll-sheet {
       background: #fcf6ea;
       border-left: 2px solid #dfc282;
       border-right: 2px solid #dfc282;
       overflow: hidden;
       transition: height 0.75s cubic-bezier(0.2, 0.8, 0.2, 1), padding 0.75s ease;
-      height: 55px; /* initial */
-      position: relative;
+      height: 55px;
     }
-    .scroll-parchment.unrolled {
-      height: 280px;
+    .scroll-sheet.unrolled {
+      height: 285px;
       padding: 16px 12px;
     }
-    .scroll-inner-info {
+    .scroll-data {
       opacity: 0;
       transform: translateY(15px);
       transition: opacity 0.5s ease 0.25s, transform 0.5s ease 0.25s;
     }
-    .scroll-parchment.unrolled .scroll-inner-info {
+    .scroll-sheet.unrolled .scroll-data {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .tassel-wrapper {
+    .tassel-container {
       cursor: pointer;
       display: inline-block;
       margin-top: -2px;
@@ -475,12 +485,12 @@
       0% { transform: rotate(-4deg); }
       100% { transform: rotate(4deg); }
     }
-    .tassel-line { width: 3px; height: 32px; background: var(--primary-burgundy); margin: 0 auto; }
-    .tassel-ball { width: 12px; height: 12px; background: var(--gold); border-radius: 50%; margin: 0 auto; }
-    .tassel-skirt { width: 22px; height: 26px; background: var(--primary-burgundy); border-radius: 0 0 10px 10px; margin: 0 auto; border-bottom: 3px solid var(--gold); }
-    .tassel-label {
+    .t-thread { width: 3px; height: 32px; background: var(--burgundy); margin: 0 auto; }
+    .t-bead { width: 12px; height: 12px; background: var(--gold); border-radius: 50%; margin: 0 auto; }
+    .t-skirt { width: 22px; height: 26px; background: var(--burgundy); border-radius: 0 0 10px 10px; margin: 0 auto; border-bottom: 3px solid var(--gold); }
+    .t-label {
       font-size: 0.8rem;
-      color: var(--primary-burgundy);
+      color: var(--burgundy);
       font-weight: 700;
       margin-top: 4px;
       display: flex;
@@ -489,38 +499,36 @@
       gap: 4px;
     }
 
-    /* Countdown Grid */
-    .countdown-grid {
+    /* Countdown */
+    .cd-row {
       display: flex;
       justify-content: center;
       gap: 8px;
       margin-top: 14px;
     }
-    .cd-box {
-      background: var(--primary-burgundy);
+    .cd-unit {
+      background: var(--burgundy);
       border: 1px solid var(--gold);
       border-radius: 10px;
       padding: 8px 10px;
       min-width: 58px;
       color: #ffffff;
     }
-    .cd-val {
+    .cd-digits {
       font-family: 'Cinzel', serif;
       font-size: 1.35rem;
       font-weight: 700;
       color: var(--gold-bright);
       line-height: 1.1;
     }
-    .cd-lbl {
+    .cd-text {
       font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #fcebeb;
     }
 
-    /* =========================================
-       WEDDING EVENTS CAROUSEL (SWIPEABLE)
-       ========================================= */
+    /* Events Slider */
     .events-slider {
       display: flex;
       overflow-x: auto;
@@ -542,9 +550,9 @@
       text-align: center;
       box-shadow: 0 6px 18px rgba(0,0,0,0.05);
     }
-    .ev-badge {
+    .ev-tag {
       display: inline-block;
-      background: var(--primary-burgundy);
+      background: var(--burgundy);
       color: var(--gold-light);
       font-size: 0.75rem;
       font-weight: 600;
@@ -557,29 +565,27 @@
       height: 54px;
       margin: 0 auto 10px auto;
     }
-    .ev-name {
+    .ev-heading {
       font-family: 'Cinzel', 'Rozha One', serif;
       font-size: 1.4rem;
-      color: var(--primary-burgundy);
+      color: var(--burgundy);
       font-weight: 700;
       margin-bottom: 4px;
     }
-    .ev-date {
+    .ev-time {
       font-size: 0.95rem;
       font-weight: 700;
       color: var(--gold-dark);
       margin-bottom: 8px;
     }
-    .ev-desc {
+    .ev-detail {
       font-size: 0.85rem;
       color: #553e36;
       line-height: 1.5;
     }
 
-    /* =========================================
-       VENUE & 1-TAP GPS NAVIGATION
-       ========================================= */
-    .venue-box {
+    /* Venue Card */
+    .venue-card {
       background: #ffffff;
       border: 2px solid var(--gold);
       border-radius: 18px;
@@ -588,40 +594,21 @@
       margin-bottom: 24px;
       box-shadow: 0 8px 25px rgba(56, 7, 17, 0.08);
     }
-    .venue-title {
-      font-family: 'Cinzel', 'Rozha One', serif;
-      font-size: 1.7rem;
-      color: var(--primary-burgundy);
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .venue-sub {
-      font-size: 0.92rem;
-      color: #4a342c;
-      line-height: 1.6;
-      margin-bottom: 18px;
-    }
-
-    .map-embed {
+    .venue-map-frame {
       width: 100%;
       height: 180px;
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid #d4af37;
-      margin-bottom: 16px;
+      margin: 16px 0;
     }
-    .map-embed iframe {
+    .venue-map-frame iframe {
       width: 100%;
       height: 100%;
       border: none;
     }
 
-    .btn-action-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .btn-gps-nav {
+    .btn-nav-gps {
       background: linear-gradient(135deg, #1b7a37 0%, #115725 100%);
       color: #ffffff;
       border: 1px solid #28a745;
@@ -635,14 +622,12 @@
       justify-content: center;
       gap: 10px;
       box-shadow: 0 6px 18px rgba(40,167,69,0.35);
-      transition: transform 0.2s;
+      margin-bottom: 10px;
     }
-    .btn-gps-nav:active {
-      transform: scale(0.98);
-    }
-    .btn-copy-address {
+    .btn-copy-addr {
+      width: 100%;
       background: #faf4e8;
-      color: var(--primary-burgundy);
+      color: var(--burgundy);
       border: 1px solid var(--gold);
       padding: 12px 20px;
       border-radius: 14px;
@@ -655,31 +640,7 @@
       gap: 8px;
     }
 
-    /* Cordial Family Section */
-    .family-card {
-      background: #fffcf7;
-      border: 1.5px solid #ebd9b5;
-      border-radius: 18px;
-      padding: 24px 16px;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-    .family-heading {
-      font-family: 'Cinzel', serif;
-      font-size: 1.15rem;
-      color: var(--primary-burgundy);
-      font-weight: 700;
-      margin-bottom: 6px;
-      border-bottom: 1px dashed var(--gold);
-      padding-bottom: 6px;
-      display: inline-block;
-    }
-    .family-list {
-      font-size: 0.9rem;
-      color: #553e36;
-      line-height: 1.7;
-      margin-bottom: 18px;
-    }
+    /* Contacts */
     .call-btn-row {
       display: flex;
       justify-content: center;
@@ -688,7 +649,7 @@
       margin-top: 10px;
     }
     .call-pill {
-      background: var(--primary-burgundy);
+      background: var(--burgundy);
       color: var(--gold-light);
       padding: 8px 18px;
       border-radius: 25px;
@@ -701,8 +662,7 @@
       border: 1px solid var(--gold);
     }
 
-    /* Toast */
-    #toast-banner {
+    #toast-msg {
       position: fixed;
       bottom: 24px;
       left: 50%;
@@ -720,7 +680,7 @@
       transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
       pointer-events: none;
     }
-    #toast-banner.show {
+    #toast-msg.show {
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
@@ -728,79 +688,86 @@
 </head>
 <body>
 
-  <!-- Canvas Petals -->
+  <!-- Floating Canvas Petals -->
   <canvas id="petals-canvas"></canvas>
 
-  <!-- Floating Audio Controls -->
-  <button id="music-btn" class="music-player-btn" title="Toggle Wedding Music">
-    <div class="music-bars">
-      <div class="music-bar"></div>
-      <div class="music-bar"></div>
-      <div class="music-bar"></div>
-    </div>
-    <span>Music</span>
-  </button>
+  <!-- Top Action Bar -->
+  <div class="top-actions-bar">
+    <a href="generator.html" class="btn-create-invites" title="नया निमंत्रण बनाएं">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>Create WhatsApp Invite</span>
+    </a>
 
-  <div id="toast-banner">Address copied to clipboard!</div>
+    <button id="music-pill" class="music-pill-btn" title="संगीत चालू / बंद करें">
+      <div class="music-wave">
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+      </div>
+      <span>Kudmayi</span>
+    </button>
+  </div>
 
-  <!-- Main Viewport -->
-  <div class="viewport-wrapper">
+  <div id="toast-msg">Address copied to clipboard!</div>
+
+  <!-- Viewport -->
+  <div class="main-viewport">
 
     <!-- =========================================
-         SCREEN 1: ROYAL ENVELOPE / 3D COVER
+         SCREEN 1: LUXURY ENVELOPE OPENING
          ========================================= -->
-    <div id="envelope-cover-screen">
-      <div class="luxury-envelope-box" id="open-box-trigger">
-        <div class="env-top-tagline">Royal Wedding Invitation</div>
+    <div id="envelope-screen">
+      <div class="envelope-box" id="open-box-trigger">
+        <div class="env-tag">Wedding Invitation • विवाह निमंत्रण</div>
         <div class="env-shloka">॥ श्री गणेशाय नमः ॥ • ॥ श्री विन्ध्यवासिनी देव्यै नमः ॥</div>
 
-        <!-- Real 3D Golden Ganesha Medallion -->
-        <div class="real-ganesha-ring">
-          <img src="assets/icons/real_ganesha.png" alt="Shree Ganesha">
+        <!-- Enhanced Real 3D Golden Ganesha Medallion -->
+        <div class="ganesha-frame">
+          <img src="assets/icons/real_ganesha.png" alt="Lord Ganesha">
         </div>
 
-        <h1 class="env-couple-title">Shivani & Saurabh</h1>
-        <div class="env-wedding-date">Saturday, 05 December 2026 • Mirzapur</div>
+        <h1 class="env-title">Shivani & Saurabh</h1>
+        <div class="env-sub-date">Saturday, 05 December 2026 • Mirzapur</div>
 
-        <!-- Guest Name Box on Envelope -->
-        <div class="env-guest-box">
-          <span class="env-guest-lbl">Specially Invited / प्रतिष्ठा में:</span>
-          <div class="env-guest-name" id="env-guest-name">Honoured Guest & Family</div>
-          <div class="env-guest-addr" id="env-guest-addr">Cordially Invited</div>
+        <!-- Guest Space on Envelope (Spacious Calligraphy Area) -->
+        <div class="env-guest-card">
+          <span class="env-guest-title">प्रतिष्ठा में (Specially Invited):</span>
+          <div class="env-guest-name" id="env-guest-name">समस्त स्नेही स्वजन</div>
+          <div class="env-guest-addr" id="env-guest-addr">एवं सपरिवार</div>
         </div>
 
-        <button class="btn-open-invite" id="open-btn">
-          <span>Tap to Open Invitation</span>
+        <button class="btn-open-card" id="open-btn">
+          <span>निमंत्रण पत्र खोलें (Open Invitation)</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
       </div>
     </div>
 
     <!-- =========================================
-         INSIDE INVITATION
+         INSIDE INVITATION MAIN BODY
          ========================================= -->
-    <div class="invitation-body" id="main-invite-body">
+    <div class="invite-container">
 
       <!-- Guest Welcome Card -->
-      <div class="personalized-welcome-banner">
-        <div class="p-welcome-sub">Cordially Welcoming</div>
-        <div class="p-welcome-name" id="page-guest-name">Honoured Guest & Family</div>
-        <div class="p-welcome-addr" id="page-guest-addr">With Your Gracious Presence</div>
+      <div class="welcome-card">
+        <div class="welcome-card-sub">सादर आमंत्रण • Cordially Welcoming</div>
+        <div class="welcome-card-name" id="page-guest-name">समस्त स्नेही स्वजन</div>
+        <div class="welcome-card-addr" id="page-guest-addr">सपरिवार • With Your Gracious Presence</div>
       </div>
 
       <!-- Sacred Invocations & Blessings -->
-      <div class="card-section">
-        <div class="real-ganesha-ring" style="width: 72px; height: 72px; margin-bottom: 8px;">
+      <div class="section-card">
+        <div class="ganesha-frame" style="width: 72px; height: 72px; margin-bottom: 8px;">
           <img src="assets/icons/real_ganesha.png" alt="Ganesh">
         </div>
 
         <div class="shloka-box">
-          <div class="shloka-text">
+          <div>
             ॥ श्री गणेशाय नमः ॥<br>
             वक्रतुण्ड महाकाय, सूर्यकोटि समप्रभः।<br>
             निर्विघ्नं कुरु मे देव, सर्वकार्येषु सर्वदा॥
           </div>
-          <div class="shloka-text" style="margin-top: 8px; border-top: 1px dashed #d4af37; padding-top: 8px;">
+          <div style="margin-top: 8px; border-top: 1px dashed #d4af37; padding-top: 8px;">
             ॥ श्री विन्ध्यवासिनी देव्यै नमः ॥<br>
             सर्व मंगल मांगल्ये, शिवे सर्वार्थ साधिके।<br>
             शरण्ये त्र्यम्बके गौरी, नारायणी नमोस्तुते॥
@@ -808,156 +775,165 @@
         </div>
 
         <p style="font-size: 0.92rem; color: #553e36; line-height: 1.7; font-weight: 500;">
-          With the divine grace of <strong>Maa Vindhyavasini Devi</strong> and blessings of our revered ancestors, we take immense joy in inviting you to the auspicious wedding celebration.
+          स्नेही स्वजन,<br>
+          जगत जननी <strong>माँ विन्ध्यवासिनी देवी जी</strong> की असीम अनुकम्पा एवं पूज्य पूर्वजों के आशीर्वाद से हमारे परिवार में वैवाहिक कार्यक्रम सुनिश्चित हुआ है।
         </p>
       </div>
 
       <!-- The Couple (Shivani & Saurabh) -->
-      <div class="card-section">
-        <div class="section-eng-title">Wedding Ceremony</div>
-        <div class="section-sub-title">Together With Their Families</div>
+      <div class="section-card">
+        <div class="bilingual-header">
+          <div class="hi-title">शुभ विवाह</div>
+          <div class="en-title">Wedding Celebration</div>
+        </div>
 
-        <div class="couple-column">
+        <div class="couple-stack">
           <!-- Bride -->
           <div class="profile-card">
-            <span class="role-badge">Bride (वधु)</span>
-            <div class="couple-person-name">Shivani Vishwakarma</div>
-            <div class="couple-lineage">
-              Granddaughter of: <strong>Late Jalebi Lal Vishwakarma</strong> & <strong>Shyama Devi</strong><br>
-              Daughter of: <strong>Mr. Jashwant Lal Vishwakarma</strong> & <strong>Mrs. Usha Devi</strong><br>
-              Residence: Vill. Baraipur, Post Rajapur, <strong>Mirzapur (U.P.)</strong>
+            <span class="profile-badge">वधु (Bride)</span>
+            <div class="profile-name">शिवानी विश्वकर्मा</div>
+            <div class="profile-lineage">
+              सुपौत्री: <strong>स्व० जलेबी लाल विश्वकर्मा</strong> एवं <strong>श्यामा देवी</strong><br>
+              सुपुत्री: <strong>श्री जशवन्त लाल विश्वकर्मा</strong> एवं <strong>श्रीमती उषा देवी</strong><br>
+              निवास: ग्राम- बरईपुर, पो०- राजापुर, <strong>मीरजापुर (उ०प्र०)</strong>
             </div>
           </div>
 
-          <div class="wedding-knot">संग</div>
+          <div class="knot-circle">संग</div>
 
           <!-- Groom -->
           <div class="profile-card">
-            <span class="role-badge">Groom (वर)</span>
-            <div class="couple-person-name">Saurabh Vishwakarma</div>
-            <div class="couple-lineage">
-              Grandson of: <strong>Late Pancham Ram Vishwakarma</strong> & <strong>Late Mahadei Devi</strong><br>
-              Son of: <strong>Mr. Jaiprakash Vishwakarma</strong> & <strong>Mrs. Shashi Kala Devi</strong><br>
-              Residence: Marjad Patti, Main Road (Prakash General Store), <strong>Bhadohi (U.P.)</strong>
+            <span class="profile-badge">वर (Groom)</span>
+            <div class="profile-name">सौरभ विश्वकर्मा</div>
+            <div class="profile-lineage">
+              सुपौत्र: <strong>स्व० पंचम राम विश्वकर्मा</strong> एवं <strong>स्व० महदेई देवी</strong><br>
+              सुपुत्र: <strong>श्री जयप्रकाश विश्वकर्मा</strong> एवं <strong>श्रीमती शशि कला देवी</strong><br>
+              निवास: मरजाद पट्टी, मेन रोड (प्रकाश जरनल स्टोर), <strong>भदोही (उ०प्र०)</strong>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Pull to Reveal Save the Date Scroll -->
-      <div class="scroll-container">
-        <div style="font-family: 'Cinzel', serif; font-size: 1.35rem; color: var(--primary-burgundy); font-weight: 700; margin-bottom: 4px;">
-          Save The Date
+      <div class="scroll-box">
+        <div class="bilingual-header" style="margin-bottom: 12px;">
+          <div class="hi-title">तिथि व शुभ मुहूर्त</div>
+          <div class="en-title">Save The Date • 05 Dec 2026</div>
         </div>
-        <div style="font-size: 0.85rem; color: var(--gold-dark); margin-bottom: 16px; font-weight: 600;">
-          Pull or tap the tassel to reveal the wedding date
+        <div style="font-size: 0.82rem; color: var(--gold-dark); margin-bottom: 14px; font-weight: 600;">
+          शादी की पावन तिथि देखने के लिए नीचे खिंचें या टैप करें
         </div>
 
         <div style="max-width: 350px; margin: 0 auto; position: relative;">
           <div class="scroll-rod"></div>
 
-          <div class="scroll-parchment" id="parchment-sheet">
-            <div class="scroll-inner-info">
-              <div style="font-size: 0.78rem; letter-spacing: 2px; color: #8c6d1d; text-transform: uppercase;">Auspicious Wedding Date</div>
-              <div style="font-family: 'Cinzel', 'Rozha One', serif; font-size: 1.85rem; color: var(--primary-burgundy); font-weight: 800; margin: 4px 0;">
-                05 December 2026
+          <div class="scroll-sheet" id="parchment-sheet">
+            <div class="scroll-data">
+              <div style="font-size: 0.78rem; letter-spacing: 2px; color: #8c6d1d; text-transform: uppercase;">॥ पावन परिणयोत्सव ॥</div>
+              <div style="font-family: 'Cinzel', 'Rozha One', serif; font-size: 1.85rem; color: var(--burgundy); font-weight: 800; margin: 4px 0;">
+                05 दिसम्बर 2026
               </div>
-              <div style="font-size: 0.95rem; font-weight: 600; color: #553e36; margin-bottom: 12px;">
-                Saturday • Shubh Vivah & Pheras
+              <div style="font-size: 0.95rem; font-weight: 600; color: #553e36; margin-bottom: 10px;">
+                शनिवार (Saturday) • शुभ विवाह एवं पाणिग्रहण संस्कार
               </div>
-              <div style="font-size: 0.88rem; color: #553e36; margin-bottom: 14px;">
-                Venue: <strong>"Shagun Lawn"</strong>, Jangi Road, Mirzapur
+              <div style="font-size: 0.88rem; color: #553e36; margin-bottom: 12px;">
+                स्थान: <strong>"शगुन लॉन"</strong>, जंगीरोड, मीरजापुर
               </div>
 
               <!-- Live Countdown -->
-              <div style="font-size: 0.75rem; letter-spacing: 1.5px; color: var(--primary-burgundy); font-weight: 700; text-transform: uppercase;">
-                Countdown to the Big Day:
+              <div style="font-size: 0.75rem; letter-spacing: 1.5px; color: var(--burgundy); font-weight: 700; text-transform: uppercase;">
+                शुभ विवाह में शेष समय (Countdown):
               </div>
-              <div class="countdown-grid">
-                <div class="cd-box"><div class="cd-val" id="cd-days">--</div><div class="cd-lbl">Days</div></div>
-                <div class="cd-box"><div class="cd-val" id="cd-hours">--</div><div class="cd-lbl">Hours</div></div>
-                <div class="cd-box"><div class="cd-val" id="cd-mins">--</div><div class="cd-lbl">Mins</div></div>
-                <div class="cd-box"><div class="cd-val" id="cd-secs">--</div><div class="cd-lbl">Secs</div></div>
+              <div class="cd-row">
+                <div class="cd-unit"><div class="cd-digits" id="cd-days">--</div><div class="cd-text">दिन (Days)</div></div>
+                <div class="cd-unit"><div class="cd-digits" id="cd-hours">--</div><div class="cd-text">घंटे (Hrs)</div></div>
+                <div class="cd-unit"><div class="cd-digits" id="cd-mins">--</div><div class="cd-text">मिनट (Min)</div></div>
+                <div class="cd-unit"><div class="cd-digits" id="cd-secs">--</div><div class="cd-text">सेकंड (Sec)</div></div>
               </div>
             </div>
           </div>
 
           <div class="scroll-rod"></div>
 
-          <div class="tassel-wrapper" id="tassel-trigger">
-            <div class="tassel-line"></div>
-            <div class="tassel-ball"></div>
-            <div class="tassel-skirt"></div>
-            <div class="tassel-label">
-              <span>Pull to Reveal</span>
+          <div class="tassel-container" id="tassel-trigger">
+            <div class="t-thread"></div>
+            <div class="t-bead"></div>
+            <div class="t-skirt"></div>
+            <div class="t-label">
+              <span>शाही फरमान खोलें (Pull to Reveal)</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Wedding Festivities Slider -->
-      <div class="card-section">
-        <div class="section-eng-title" style="font-size: 2.4rem;">Events & Festivities</div>
-        <div class="section-sub-title">Swipe to view all ceremonies (मांगलिक कार्यक्रम)</div>
+      <!-- Festivities Carousel -->
+      <div class="section-card">
+        <div class="bilingual-header">
+          <div class="hi-title">मांगलिक कार्यक्रम</div>
+          <div class="en-title">Wedding Festivities & Timeline</div>
+        </div>
 
         <div class="events-slider">
           
           <!-- Event 1 -->
           <div class="ev-card">
-            <span class="ev-badge">Day 1 • 03 Dec 2026</span>
+            <span class="ev-tag">प्रथम दिवस • Day 1</span>
             <img src="assets/icons/kalash.svg" alt="Matimangara" class="ev-icon">
-            <div class="ev-name">Matimangara (मतिमंगरा)</div>
-            <div class="ev-date">Thursday, 03 December 2026</div>
-            <div class="ev-desc">Kuldevta Pujan and auspicious commencement of ceremonies.</div>
-            <div style="margin-top: 10px; font-size: 0.78rem; color: #795548; font-weight: 600;">Dress Code: Traditional</div>
+            <div class="ev-heading">मतिमंगरा (Matimangara)</div>
+            <div class="ev-time">03 दिसम्बर 2026, गुरुवार</div>
+            <div class="ev-detail">कुलदेवता पूजन एवं शुभ मांगलिक कार्यों का शुभारंभ।</div>
+            <div style="margin-top: 10px; font-size: 0.78rem; color: #795548; font-weight: 600;">पहनावा: पारंपरिक (Traditional)</div>
           </div>
 
           <!-- Event 2 -->
           <div class="ev-card">
-            <span class="ev-badge">Day 2 • 04 Dec 2026</span>
+            <span class="ev-tag">द्वितीय दिवस • Day 2</span>
             <img src="assets/icons/shehnai.svg" alt="Bhattwan" class="ev-icon">
-            <div class="ev-name">Bhattwan & Haldi (भत्तवान)</div>
-            <div class="ev-date">Friday, 04 December 2026</div>
-            <div class="ev-desc">Traditional Haldi ceremony, festive folk songs, and celebration feast.</div>
-            <div style="margin-top: 10px; font-size: 0.78rem; color: #b78103; font-weight: 600;">Dress Code: Festive Yellow (पीतांबरी)</div>
+            <div class="ev-heading">भत्तवान एवं हल्दी (Haldi)</div>
+            <div class="ev-time">04 दिसम्बर 2026, शुक्रवार</div>
+            <div class="ev-detail">मांगलिक हल्दी, भत्तवान स्नेह भोज एवं मधुर लोकगीत संगीत।</div>
+            <div style="margin-top: 10px; font-size: 0.78rem; color: #b78103; font-weight: 600;">पहनावा: पीतांबरी (Festive Yellow)</div>
           </div>
 
           <!-- Event 3 -->
-          <div class="ev-card" style="border: 2px solid var(--primary-burgundy);">
-            <span class="ev-badge" style="background: #871325;">Main Wedding Day</span>
-            <img src="assets/icons/mandap.svg" alt="Shubh Vivah" class="ev-icon">
-            <div class="ev-name" style="color: #871325;">Shubh Vivah (शुभ विवाह)</div>
-            <div class="ev-date">Saturday, 05 December 2026</div>
-            <div class="ev-desc">Baraat Swagat, Jaimala, and sacred Pheras at Shagun Lawn.</div>
-            <div style="margin-top: 10px; font-size: 0.78rem; color: #871325; font-weight: 600;">Dress Code: Royal Ethnic / Formal</div>
+          <div class="ev-card" style="border: 2px solid var(--burgundy);">
+            <span class="ev-tag" style="background: #871325;">मुख्य उत्सव • Wedding Day</span>
+            <img src="assets/icons/mandap.svg" alt="Vivah" class="ev-icon">
+            <div class="ev-heading" style="color: #871325;">शुभ विवाह एवं बारात</div>
+            <div class="ev-time">05 दिसम्बर 2026, शनिवार</div>
+            <div class="ev-detail">शुभ बारात आगमन, द्वारपूजा, जयमाल एवं पवित्र पाणिग्रहण संस्कार।</div>
+            <div style="margin-top: 10px; font-size: 0.78rem; color: #871325; font-weight: 600;">स्थान: "शगुन लॉन", मीरजापुर</div>
           </div>
 
           <!-- Event 4 -->
           <div class="ev-card">
-            <span class="ev-badge">Day 4 • 06 Dec 2026</span>
+            <span class="ev-tag">चतुर्थ दिवस • Day 4</span>
             <img src="assets/icons/peacock.svg" alt="Vidai" class="ev-icon">
-            <div class="ev-name">Vidai (विदाई)</div>
-            <div class="ev-date">Sunday, 06 December 2026</div>
-            <div class="ev-desc">Bidding farewell with warmest blessings and hearty wishes.</div>
-            <div style="margin-top: 10px; font-size: 0.78rem; color: #795548; font-weight: 600;">Heartfelt Blessings</div>
+            <div class="ev-heading">विदाई (Vidai Ceremony)</div>
+            <div class="ev-time">06 दिसम्बर 2026, रविवार</div>
+            <div class="ev-detail">नवदम्पति को शुभाशीर्वाद एवं मंगलमय विदाई बेला।</div>
+            <div style="margin-top: 10px; font-size: 0.78rem; color: #795548; font-weight: 600;">मंगलमय आशीर्वाद</div>
           </div>
 
         </div>
       </div>
 
-      <!-- Venue & 1-Tap Google Maps Navigation -->
-      <div class="venue-box">
-        <div style="font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 2px; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 6px;">
-          Wedding Destination
+      <!-- Venue & Navigation -->
+      <div class="venue-card">
+        <div class="bilingual-header">
+          <div class="hi-title">कार्यक्रम स्थल</div>
+          <div class="en-title">Wedding Venue & GPS Navigation</div>
         </div>
-        <div class="venue-title">"Shagun Lawn" (शगुन लॉन)</div>
-        <div class="venue-sub">
-          Next to Popular Hospital, Jangi Road,<br>
-          <strong>Mirzapur, Uttar Pradesh</strong>
+        <div style="font-family: 'Cinzel', 'Rozha One', serif; font-size: 1.6rem; color: var(--burgundy); font-weight: 700; margin-bottom: 4px;">
+          "शगुन लॉन" (Shagun Lawn)
+        </div>
+        <div style="font-size: 0.92rem; color: #4a342c; line-height: 1.6;">
+          पॉपुलर हॉस्पिटल के बगल में, जंगी रोड,<br>
+          <strong>मीरजापुर, उत्तर प्रदेश</strong>
         </div>
 
-        <div class="map-embed">
+        <div class="venue-map-frame">
           <iframe 
             src="https://maps.google.com/maps?q=Shagun+Lawn+Jangi+Road+Mirzapur&t=&z=15&ie=UTF8&iwloc=&output=embed"
             loading="lazy"
@@ -965,58 +941,63 @@
           </iframe>
         </div>
 
-        <div class="btn-action-group">
-          <a href="https://maps.google.com/?q=Shagun+Lawn+Jangi+Road+Mirzapur" 
-             target="_blank" 
-             rel="noopener noreferrer" 
-             class="btn-gps-nav">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            <span>Start Navigation on Google Maps</span>
-          </a>
+        <a href="https://maps.google.com/?q=Shagun+Lawn+Jangi+Road+Mirzapur" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-nav-gps">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          <span>गूगल मैप्स पर रास्ता देखें (Start Navigation)</span>
+        </a>
 
-          <button class="btn-copy-address" id="btn-copy-addr">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span>Copy Venue Address</span>
-          </button>
-        </div>
+        <button class="btn-copy-addr" id="copy-addr-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>स्थान का पता कॉपी करें (Copy Address)</span>
+        </button>
       </div>
 
       <!-- Family & Inviters -->
-      <div class="family-card">
-        <div class="family-heading">With Best Compliments (दर्शनाभिलाषी)</div>
-        <div class="family-list">
-          Satyam, Shivam, Sundaram, Pritam Vishwakarma<br>
-          & Entire Vishwakarma Family
+      <div class="section-card">
+        <div class="bilingual-header">
+          <div class="hi-title">दर्शनाभिलाषी</div>
+          <div class="en-title">With Best Compliments</div>
+        </div>
+        <div style="font-size: 0.92rem; color: #553e36; line-height: 1.7; margin-bottom: 18px;">
+          सत्यम् विश्वकर्मा, शिवम् विश्वकर्मा,<br>
+          सुन्दरम् विश्वकर्मा, प्रितम विश्वकर्मा<br>
+          एवं समस्त विश्वकर्मा परिवार
         </div>
 
-        <div class="family-heading">Cordially Inviting (विनीत)</div>
-        <div class="family-list">
-          <strong>Mr. Jashwant Lal Vishwakarma</strong><br>
-          <strong>Mr. Bindresh Kumar Vishwakarma</strong><br>
-          Vill. Baraipur, Post Rajapur, Mirzapur (U.P.)
+        <div class="bilingual-header" style="margin-top: 14px;">
+          <div class="hi-title">विनीत</div>
+          <div class="en-title">Cordially Inviting</div>
+        </div>
+        <div style="font-size: 0.92rem; color: #553e36; line-height: 1.7;">
+          <strong>श्री जशवन्त लाल विश्वकर्मा</strong><br>
+          <strong>श्री बिन्द्रेश कुमार विश्वकर्मा</strong><br>
+          ग्राम- बरईपुर, पो०- राजापुर, मीरजापुर
         </div>
 
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-burgundy); text-transform: uppercase; margin-top: 14px;">
-          Direct Contact / Helpline
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--burgundy); text-transform: uppercase; margin-top: 16px;">
+          सम्पर्क सूत्र (Direct Calling Helpline)
         </div>
         <div class="call-btn-row">
           <a href="tel:6387290280" class="call-pill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <span>+91 6387290280</span>
+            <span>6387290280</span>
           </a>
           <a href="tel:8299723184" class="call-pill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <span>+91 8299723184</span>
+            <span>8299723184</span>
           </a>
         </div>
       </div>
 
-      <!-- Footer Blessings -->
-      <div style="text-align: center; padding: 20px 10px; color: #795548; font-size: 0.82rem; line-height: 1.6;">
-        <div style="font-family: 'Cinzel', serif; font-size: 0.95rem; color: var(--primary-burgundy); font-weight: 700; margin-bottom: 4px;">
-          Vishwakarma Family, Mirzapur
+      <!-- Footer -->
+      <div style="text-align: center; padding: 20px 10px; color: #795548; font-size: 0.85rem; line-height: 1.6;">
+        <div style="font-family: 'Cinzel', serif; font-size: 0.98rem; color: var(--burgundy); font-weight: 700; margin-bottom: 4px;">
+          विश्वकर्मा परिवार, मीरजापुर
         </div>
-        <div>We eagerly look forward to welcoming you and celebrating together!</div>
+        <div>आपकी गरिमामयी उपस्थिति नवदम्पति के लिए परम आशीर्वाद होगी।</div>
       </div>
 
     </div>
@@ -1031,8 +1012,8 @@
     const guestParam = params.get('to') || params.get('guest') || params.get('name');
     const addrParam = params.get('addr') || params.get('city') || params.get('address');
 
-    const defaultName = "Honoured Guest & Family";
-    const defaultAddr = "Cordially Invited";
+    const defaultName = "समस्त स्नेही स्वजन";
+    const defaultAddr = "एवं सपरिवार";
 
     const guestName = guestParam ? decodeURIComponent(guestParam) : defaultName;
     const guestAddr = addrParam ? decodeURIComponent(addrParam) : defaultAddr;
@@ -1042,9 +1023,9 @@
     document.getElementById('page-guest-name').textContent = guestName;
     document.getElementById('page-guest-addr').textContent = guestAddr;
 
-    // 2. Audio Engine
+    // 2. Audio Engine (Kudmayi song on continuous repeat loop)
     const weddingAudio = new RoyalWeddingAudio();
-    const musicBtn = document.getElementById('music-btn');
+    const musicBtn = document.getElementById('music-pill');
 
     musicBtn.addEventListener('click', () => {
       const isPlaying = weddingAudio.toggle();
@@ -1056,12 +1037,14 @@
     });
 
     // 3. Open Envelope Trigger
-    const envScreen = document.getElementById('envelope-cover-screen');
+    const envScreen = document.getElementById('envelope-screen');
     const openBtn = document.getElementById('open-btn');
     const openBox = document.getElementById('open-box-trigger');
 
     function openEnvelope() {
       envScreen.classList.add('opened');
+      
+      // Start Kudmayi song
       weddingAudio.play();
       musicBtn.classList.add('playing');
 
@@ -1093,7 +1076,7 @@
       if (isScrollRevealed) return;
       isScrollRevealed = true;
       parchment.classList.add('unrolled');
-      tasselTrigger.querySelector('.tassel-label span').textContent = 'Wedding: 05 Dec 2026';
+      tasselTrigger.querySelector('.t-label span').textContent = 'शुभ विवाह: 05 दिसम्बर 2026';
       
       if (typeof confetti === 'function') {
         confetti({
@@ -1142,15 +1125,15 @@
     updateCountdown();
 
     // 6. Copy Address
-    const copyBtn = document.getElementById('btn-copy-addr');
-    const toast = document.getElementById('toast-banner');
+    const copyBtn = document.getElementById('copy-addr-btn');
+    const toast = document.getElementById('toast-msg');
 
     copyBtn.addEventListener('click', () => {
-      const fullAddress = `"Shagun Lawn", Near Popular Hospital, Jangi Road, Mirzapur, Uttar Pradesh`;
+      const fullAddress = `"शगुन लॉन", पापुलर हास्पिटल के बगल में, जंगीरोड, मीरजापुर, उत्तर प्रदेश`;
       navigator.clipboard.writeText(fullAddress).then(() => {
-        showToast("Venue address copied to clipboard!");
+        showToast("स्थान का पता कॉपी हो गया!");
       }).catch(() => {
-        showToast("Venue: Shagun Lawn, Jangi Road, Mirzapur");
+        showToast("स्थान: शगुन लॉन, जंगीरोड, मीरजापुर");
       });
     });
 

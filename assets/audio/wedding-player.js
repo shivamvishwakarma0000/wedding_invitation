@@ -1,43 +1,63 @@
 /**
- * Royal Indian Wedding Music Engine
- * Uses local acoustic wedding melody WAV with smooth fade-in, looping, and Web Audio fallback
+ * Wedding Music Engine
+ * Plays the Kudmayi wedding song on an infinite loop throughout the invitation.
+ * Never stops on scrolling; continues looping until user pauses or closes the tab.
  */
 class RoyalWeddingAudio {
-  constructor(audioSrc = 'assets/audio/wedding_melody.wav') {
+  constructor(audioSrc = 'assets/audio/wedding_song.mp3') {
     this.audioSrc = audioSrc;
+    this.fallbackSrc = 'assets/audio/wedding_melody.wav';
     this.audioEl = null;
     this.isPlaying = false;
-    this.ctx = null;
-    this.synthInterval = null;
     this.initAudioElement();
   }
 
   initAudioElement() {
     this.audioEl = new Audio(this.audioSrc);
-    this.audioEl.loop = true;
+    this.audioEl.loop = true; // Infinite repeat
     this.audioEl.preload = 'auto';
 
+    // If Kudmayi mp3 fails, fallback to wedding_melody.wav
     this.audioEl.addEventListener('error', () => {
-      console.warn("Local audio could not load, using built-in Shehnai synthesizer.");
-      this.audioEl = null;
+      console.warn("Primary audio not loaded, switching to fallback melody.");
+      if (this.audioEl.src !== this.fallbackSrc) {
+        this.audioEl.src = this.fallbackSrc;
+        this.audioEl.load();
+        if (this.isPlaying) this.audioEl.play().catch(e => console.log(e));
+      }
+    });
+
+    // Ensure audio loops without stopping
+    this.audioEl.addEventListener('ended', () => {
+      if (this.isPlaying) {
+        this.audioEl.currentTime = 0;
+        this.audioEl.play().catch(e => console.log(e));
+      }
     });
   }
 
   play() {
-    if (this.isPlaying) return;
     this.isPlaying = true;
-
     if (this.audioEl) {
-      this.audioEl.volume = 0.85;
+      this.audioEl.volume = 0.9;
       const promise = this.audioEl.play();
       if (promise !== undefined) {
         promise.catch(err => {
-          console.log("Audio autoplay prevented, using synth fallback on click:", err);
-          this.startIndianWeddingSynth();
+          console.log("Autoplay waiting for user touch gesture:", err);
+          // Unlock on first touch/interaction anywhere on window
+          const unlockAudio = () => {
+            if (this.isPlaying) {
+              this.audioEl.play().catch(e => console.log(e));
+            }
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('touchstart', unlockAudio);
+            window.removeEventListener('scroll', unlockAudio);
+          };
+          window.addEventListener('click', unlockAudio, { once: true });
+          window.addEventListener('touchstart', unlockAudio, { once: true });
+          window.addEventListener('scroll', unlockAudio, { once: true });
         });
       }
-    } else {
-      this.startIndianWeddingSynth();
     }
   }
 
@@ -46,7 +66,6 @@ class RoyalWeddingAudio {
     if (this.audioEl) {
       this.audioEl.pause();
     }
-    this.stopIndianWeddingSynth();
   }
 
   toggle() {
@@ -56,84 +75,6 @@ class RoyalWeddingAudio {
       this.play();
     }
     return this.isPlaying;
-  }
-
-  startIndianWeddingSynth() {
-    if (this.ctx) return;
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      this.ctx = new AudioCtx();
-    } catch (e) {
-      return;
-    }
-
-    const ctx = this.ctx;
-    const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(0.2, ctx.currentTime);
-    masterGain.connect(ctx.destination);
-
-    // Tanpura Drone (Sa, Pa)
-    [146.83, 220.00, 293.66].forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(400 + idx * 70, ctx.currentTime);
-
-      gain.gain.setValueAtTime(0.06, ctx.currentTime);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(masterGain);
-      osc.start();
-    });
-
-    const ragaNotes = [293.66, 329.63, 369.99, 415.30, 440.00, 493.88, 554.37, 587.33];
-    const melody = [0, 2, 4, 3, 2, 1, 0, 2, 4, 6, 7, 6, 4, 2];
-    let noteIdx = 0;
-
-    this.synthInterval = setInterval(() => {
-      if (!this.isPlaying || !this.ctx) return;
-      const freq = ragaNotes[melody[noteIdx]];
-      const osc = ctx.createOscillator();
-      const noteGain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.01, ctx.currentTime + 0.3);
-
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(freq * 2, ctx.currentTime);
-      filter.Q.setValueAtTime(3.0, ctx.currentTime);
-
-      const now = ctx.currentTime;
-      noteGain.gain.setValueAtTime(0.001, now);
-      noteGain.gain.linearRampToValueAtTime(0.18, now + 0.1);
-      noteGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
-
-      osc.connect(filter);
-      filter.connect(noteGain);
-      noteGain.connect(masterGain);
-
-      osc.start(now);
-      osc.stop(now + 0.7);
-
-      noteIdx = (noteIdx + 1) % melody.length;
-    }, 450);
-  }
-
-  stopIndianWeddingSynth() {
-    if (this.synthInterval) {
-      clearInterval(this.synthInterval);
-      this.synthInterval = null;
-    }
-    if (this.ctx) {
-      try { this.ctx.close(); } catch(e){}
-      this.ctx = null;
-    }
   }
 }
 
