@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 140" fill="none">
+  <defs>
+    <linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE082" />
+      <stop offset="50%" stop-color="#FFB300" />
+      <stop offset="100%" stop-color="#BF360C" />
+    </linearGradient>
+  </defs>
+  <!-- Stylized Royal Peacock -->
+  <g fill="url(#pg)">
+    <!-- Crest -->
+    <circle cx="50" cy="24" r="2.5"/>
+    <circle cx="55" cy="20" r="2.5"/>
+    <circle cx="60" cy="22" r="2.5"/>
+    <path d="M50 24 L56 36 M55 20 L58 36 M60 22 L60 36" stroke="url(#pg)" stroke-width="1.5"/>
+    <!-- Head and Neck -->
+    <path d="M58 35 C52 35 44 42 46 50 C48 56 54 62 60 70 C64 76 66 84 62 94 C56 102 46 104 38 102 C46 112 64 114 74 104 C84 94 82 78 74 68 C68 60 64 54 64 48 C64 42 66 38 60 35 Z"/>
+    <path d="M46 44 L38 47 L46 50 Z" />
+    <!-- Feathers fan -->
+    <path d="M78 80 C100 60 134 50 160 54 C166 70 150 90 120 100 C150 96 166 110 156 122 C134 130 100 120 78 100 Z" opacity="0.9"/>
+    <!-- Feather eyes -->
+    <circle cx="120" cy="74" r="6" fill="#B71C1C"/>
+    <circle cx="120" cy="74" r="3" fill="#FFE082"/>
+    <circle cx="140" cy="86" r="6" fill="#B71C1C"/>
+    <circle cx="140" cy="86" r="3" fill="#FFE082"/>
+    <circle cx="128" cy="108" r="6" fill="#B71C1C"/>
+    <circle cx="128" cy="108" r="3" fill="#FFE082"/>
+  </g>
+</svg>

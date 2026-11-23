@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <defs>
+    <linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE082"/>
+      <stop offset="100%" stop-color="#FF8F00"/>
+    </linearGradient>
+    <linearGradient id="fire" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#D84315"/>
+      <stop offset="50%" stop-color="#FF8F00"/>
+      <stop offset="100%" stop-color="#FFEE58"/>
+    </linearGradient>
+  </defs>
+  <!-- Pillars -->
+  <rect x="25" y="45" width="10" height="85" rx="2" fill="url(#mg)"/>
+  <rect x="125" y="45" width="10" height="85" rx="2" fill="url(#mg)"/>
+  <rect x="20" y="40" width="120" height="8" rx="3" fill="url(#mg)"/>
+  <path d="M20 40 Q80 15 140 40 Z" fill="url(#mg)"/>
+  <!-- Kalash on top -->
+  <circle cx="80" cy="20" r="6" fill="#FFC107"/>
+  <path d="M76 26 L84 26 L82 30 L78 30 Z" fill="#FF8F00"/>
+  <!-- Havan Kund -->
+  <path d="M60 120 L100 120 L94 135 L66 135 Z" fill="#795548"/>
+  <rect x="54" y="116" width="52" height="5" fill="#8D6E63"/>
+  <!-- Holy Flame -->
+  <path d="M80 85 C88 95 92 105 88 116 C84 116 82 114 80 110 C78 114 76 116 72 116 C68 105 72 95 80 85 Z" fill="url(#fire)"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <defs>
+    <linearGradient id="kg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE082" />
+      <stop offset="50%" stop-color="#FFB300" />
+      <stop offset="100%" stop-color="#E65100" />
+    </linearGradient>
+  </defs>
+  <!-- Coconut on top -->
+  <path d="M80 30 C70 30 64 45 66 58 L94 58 C96 45 90 30 80 30 Z" fill="#8D6E63"/>
+  <circle cx="80" cy="26" r="3" fill="#D7CCC8"/>
+  <!-- Mango leaves -->
+  <path d="M66 56 C50 48 44 32 40 18 C52 24 64 38 68 54 Z" fill="#2E7D32"/>
+  <path d="M94 56 C110 48 116 32 120 18 C108 24 96 38 92 54 Z" fill="#2E7D32"/>
+  <path d="M80 46 C74 30 68 16 62 6 C78 14 86 28 84 46 Z" fill="#388E3C"/>
+  <path d="M80 46 C86 30 92 16 98 6 C82 14 74 28 76 46 Z" fill="#388E3C"/>
+  <!-- Pot Neck & Body -->
+  <path d="M60 60 L100 60 L96 72 L64 72 Z" fill="url(#kg)"/>
+  <path d="M64 72 C46 80 42 110 56 126 C66 138 94 138 104 126 C118 110 114 80 96 72 Z" fill="url(#kg)"/>
+  <!-- Swastika on pot -->
+  <path d="M80 88 V112 M68 100 H92 M80 88 H90 M92 100 V110 M80 112 H70 M68 100 V90" stroke="#B71C1C" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Base -->
+  <rect x="68" y="134" width="24" height="6" rx="2" fill="url(#kg)"/>
+</svg>
