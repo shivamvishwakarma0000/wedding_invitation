@@ -2,29 +2,31 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Wedding Invitation | शिवानी संग सौरभ</title>
   
-  <!-- Premium Google Fonts -->
+  <!-- Premium Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Great+Vibes&family=Montserrat:wght@400;500;600;700&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Great+Vibes&family=Montserrat:wght@400;500;600;700;800&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
   
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
-      --burgundy: #380711;
-      --burgundy-light: #520b19;
+      --primary-wine: #480914;
+      --deep-crimson: #2f030b;
+      --card-maroon: #580d1a;
       --gold: #d4af37;
-      --gold-light: #f7e7be;
+      --gold-light: #fbe6af;
       --gold-bright: #ffe082;
       --gold-dark: #8c6d1d;
-      --ivory: #faf7f2;
-      --cream: #f4ecdc;
-      --text-dark: #2a140d;
-      --text-muted: #5e433a;
+      --ivory: #fffdf9;
+      --silk-bg: #faf4e8;
+      --text-main: #2b140d;
+      --text-muted: #664c42;
+      --wa-green: #25D366;
     }
 
     * {
@@ -34,27 +36,33 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-      background: #1e0308;
-      color: var(--text-dark);
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: #180206;
+      color: var(--text-main);
       font-family: 'Montserrat', sans-serif;
-      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body {
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      overflow-x: hidden;
     }
 
-    .main-viewport {
+    /* 100% Fluid Mobile Container */
+    .app-screen {
       width: 100%;
-      max-width: 500px;
+      max-width: 460px;
       min-height: 100vh;
       background: var(--ivory);
       position: relative;
-      box-shadow: 0 0 60px rgba(0,0,0,0.85);
+      box-shadow: 0 0 50px rgba(0,0,0,0.85);
       overflow-x: hidden;
     }
 
+    /* Falling Petals */
     #petals-canvas {
       position: fixed;
       top: 0;
@@ -65,34 +73,36 @@
       z-index: 99;
     }
 
-    /* Top Floating Action Bar */
-    .top-actions-bar {
+    /* =========================================
+       FLOATING TOP NAVIGATION / ACTION BAR
+       ========================================= */
+    .sticky-top-bar {
       position: fixed;
-      top: 14px;
+      top: 12px;
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
-      max-width: 480px;
-      padding: 0 14px;
+      max-width: 440px;
+      padding: 0 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 1000;
       pointer-events: none;
     }
-    .top-actions-bar > * {
+    .sticky-top-bar > * {
       pointer-events: auto;
     }
 
-    .btn-create-invites {
-      background: rgba(45, 6, 14, 0.92);
+    .btn-generator-drawer {
+      background: rgba(47, 3, 11, 0.94);
       border: 1.5px solid var(--gold);
       color: var(--gold-bright);
       padding: 7px 14px;
       border-radius: 25px;
       font-size: 0.76rem;
       font-weight: 700;
-      text-decoration: none;
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -100,43 +110,43 @@
       backdrop-filter: blur(8px);
     }
 
-    .music-pill-btn {
-      background: rgba(45, 6, 14, 0.92);
+    .btn-music-toggle {
+      background: rgba(47, 3, 11, 0.94);
       border: 1.5px solid var(--gold);
       color: var(--gold-bright);
-      padding: 7px 12px;
+      padding: 7px 14px;
       border-radius: 25px;
-      font-size: 0.74rem;
+      font-size: 0.76rem;
       font-weight: 700;
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      cursor: pointer;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       backdrop-filter: blur(8px);
     }
-    .music-wave {
+    .equalizer-bars {
       display: flex;
       align-items: flex-end;
       gap: 3px;
       height: 14px;
     }
-    .wave-line {
+    .eq-bar {
       width: 2.5px;
       background: var(--gold-bright);
       border-radius: 2px;
       height: 4px;
     }
-    .music-pill-btn.playing .wave-line:nth-child(1) { animation: wavePulse 0.8s ease-in-out infinite alternate; }
-    .music-pill-btn.playing .wave-line:nth-child(2) { animation: wavePulse 0.6s ease-in-out infinite alternate 0.2s; }
-    .music-pill-btn.playing .wave-line:nth-child(3) { animation: wavePulse 1.0s ease-in-out infinite alternate 0.4s; }
-    @keyframes wavePulse {
+    .btn-music-toggle.playing .eq-bar:nth-child(1) { animation: eqBeat 0.8s ease-in-out infinite alternate; }
+    .btn-music-toggle.playing .eq-bar:nth-child(2) { animation: eqBeat 0.6s ease-in-out infinite alternate 0.2s; }
+    .btn-music-toggle.playing .eq-bar:nth-child(3) { animation: eqBeat 1.0s ease-in-out infinite alternate 0.4s; }
+    @keyframes eqBeat {
       0% { height: 3px; }
       100% { height: 14px; }
     }
 
     /* =========================================
-       SCREEN 1: LUXURY ENVELOPE OPENING
+       SCREEN 1: ROYAL ENVELOPE (PROPER BIG FORMAT)
        ========================================= */
     #envelope-screen {
       position: fixed;
@@ -150,7 +160,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
       transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
     #envelope-screen.opened {
@@ -161,11 +171,11 @@
 
     .envelope-box {
       width: 100%;
-      max-width: 410px;
-      background: linear-gradient(145deg, #420813 0%, #28030a 100%);
+      max-width: 400px;
+      background: linear-gradient(145deg, #450813 0%, #29030b 100%);
       border: 2px solid var(--gold);
       border-radius: 18px;
-      padding: 34px 22px;
+      padding: 26px 18px;
       text-align: center;
       color: var(--ivory);
       position: relative;
@@ -175,81 +185,85 @@
     .envelope-box::before {
       content: '';
       position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
       border: 1px dashed rgba(247, 231, 190, 0.45);
       border-radius: 12px;
       pointer-events: none;
     }
 
-    .env-tag {
-      font-family: 'Cinzel', serif;
+    /* Auspicious Inscription on Top */
+    .env-top-shloka {
       font-size: 0.82rem;
-      letter-spacing: 2.5px;
-      color: var(--gold-light);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .env-shloka {
-      font-size: 0.88rem;
       color: var(--gold-bright);
-      margin-bottom: 18px;
+      margin-bottom: 6px;
       font-family: 'Rozha One', serif;
     }
 
-    /* Enhanced Real Ganesha Medallion */
-    .ganesha-frame {
-      width: 98px;
-      height: 98px;
-      margin: 0 auto 16px auto;
+    /* Groom and Bride Name ON TOP Prominently */
+    .env-couple-header {
+      font-family: 'Rozha One', serif;
+      font-size: 1.85rem;
+      color: var(--gold-light);
+      margin-bottom: 2px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .env-couple-english {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      color: var(--gold-bright);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* New Golden Ganesha Medallion */
+    .env-ganesh-ring {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 12px auto;
       border-radius: 50%;
-      border: 3.5px solid var(--gold);
+      border: 3px solid var(--gold);
       background: radial-gradient(circle, #5a101d 0%, #280209 100%);
-      box-shadow: 0 0 28px rgba(212, 175, 55, 0.65), inset 0 0 15px rgba(0,0,0,0.7);
-      padding: 5px;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.65), inset 0 0 15px rgba(0,0,0,0.7);
+      padding: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .ganesha-frame img {
+    .env-ganesh-ring img {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8));
     }
 
-    .env-title {
-      font-family: 'Cinzel', 'Rozha One', serif;
-      font-size: 1.95rem;
-      color: var(--gold-light);
-      font-weight: 700;
-      margin-bottom: 4px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
-    }
-    .env-sub-date {
+    /* Wedding Date on Envelope */
+    .env-date-tag {
       display: inline-block;
       border: 1px solid var(--gold);
-      padding: 4px 18px;
+      background: rgba(212, 175, 55, 0.12);
+      padding: 4px 16px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #ffe082;
-      margin-bottom: 22px;
-      letter-spacing: 1px;
+      margin-bottom: 18px;
+      font-weight: 600;
     }
 
-    /* Guest Space on Envelope */
-    .env-guest-card {
+    /* Guest Name Box in Proper Big Format */
+    .env-guest-container {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(212, 175, 55, 0.38);
       border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 26px;
+      padding: 16px 14px;
+      margin-bottom: 20px;
       text-align: left;
     }
-    .env-guest-title {
-      font-size: 0.75rem;
+    .guest-header-label {
+      font-size: 0.74rem;
       letter-spacing: 1.5px;
       color: var(--gold-light);
       text-transform: uppercase;
@@ -257,25 +271,28 @@
       font-family: 'Cinzel', serif;
       display: block;
     }
-    .env-guest-name {
-      font-family: 'Rozha One', 'Montserrat', serif;
-      font-size: 1.38rem;
+    .guest-name-big {
+      font-family: 'Rozha One', 'Cinzel', serif;
+      font-size: 1.65rem;
       color: #ffffff;
-      line-height: 1.3;
-      margin-bottom: 4px;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      word-break: break-word;
     }
-    .env-guest-addr {
-      font-size: 0.88rem;
-      color: #e2d2c8;
+    .guest-addr-clean {
+      font-size: 0.9rem;
+      color: #ffd54f;
+      font-weight: 500;
     }
 
-    .btn-open-card {
+    .btn-open-envelope {
       background: linear-gradient(135deg, #d4af37 0%, #aa820a 100%);
       color: #2b040a;
       font-family: 'Cinzel', serif;
       font-weight: 700;
-      font-size: 0.98rem;
-      padding: 14px 32px;
+      font-size: 0.95rem;
+      padding: 13px 28px;
       border-radius: 30px;
       border: none;
       cursor: pointer;
@@ -291,53 +308,55 @@
     }
 
     /* =========================================
-       INSIDE INVITATION BODY
+       INSIDE INVITATION BODY (100% RESPONSIVE)
        ========================================= */
-    .invite-container {
-      padding: 60px 18px 80px 18px;
+    .card-body-content {
+      padding: 58px 16px 80px 16px;
+      position: relative;
     }
 
-    /* Personalized Welcome */
-    .welcome-card {
+    /* Guest Banner */
+    .guest-top-banner {
       background: linear-gradient(135deg, #3d0712 0%, #250209 100%);
       border: 1.5px solid var(--gold);
       border-radius: 16px;
-      padding: 22px 18px;
+      padding: 20px 16px;
       text-align: center;
       color: #ffffff;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     }
-    .welcome-card-sub {
+    .gtb-sub {
       font-family: 'Cinzel', serif;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       letter-spacing: 2px;
       color: var(--gold-light);
       text-transform: uppercase;
     }
-    .welcome-card-name {
-      font-family: 'Rozha One', 'Montserrat', serif;
+    .gtb-name {
+      font-family: 'Rozha One', 'Cinzel', serif;
       font-size: 1.55rem;
       color: #ffffff;
       margin: 6px 0;
+      line-height: 1.3;
     }
-    .welcome-card-addr {
-      font-size: 0.9rem;
+    .gtb-addr {
+      font-size: 0.88rem;
       color: var(--gold-bright);
     }
 
-    /* Section Cards */
-    .section-card {
+    /* Sections */
+    .royal-card {
       background: #ffffff;
       border: 1.5px solid rgba(212, 175, 55, 0.42);
       border-radius: 18px;
-      padding: 26px 18px;
-      margin-bottom: 24px;
+      padding: 24px 16px;
+      margin-bottom: 22px;
       text-align: center;
       position: relative;
       box-shadow: 0 8px 25px rgba(56, 7, 17, 0.06);
     }
-    .section-card::after {
+    .royal-card::after {
       content: '';
       position: absolute;
       top: 6px;
@@ -349,85 +368,84 @@
       pointer-events: none;
     }
 
-    .bilingual-header {
-      margin-bottom: 18px;
+    .card-header-duo {
+      margin-bottom: 16px;
     }
-    .bilingual-header .hi-title {
+    .card-header-duo .hi {
       font-family: 'Rozha One', serif;
-      font-size: 1.7rem;
-      color: var(--burgundy);
+      font-size: 1.65rem;
+      color: var(--primary-wine);
       margin-bottom: 2px;
     }
-    .bilingual-header .en-title {
+    .card-header-duo .en {
       font-family: 'Cinzel', serif;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       letter-spacing: 2px;
       color: var(--gold-dark);
       text-transform: uppercase;
     }
 
     /* Shlokas */
-    .shloka-box {
+    .shloka-frame {
       background: #fcf7ee;
       border: 1px solid #ebd9b5;
       border-radius: 12px;
-      padding: 16px 14px;
+      padding: 16px 12px;
       margin: 14px 0;
       color: #5c1f28;
       font-family: 'Rozha One', serif;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       line-height: 1.65;
     }
 
     /* Couple Cards */
-    .couple-stack {
+    .couple-column {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
-    .profile-card {
+    .person-card {
       background: #fffdfa;
       border: 1.5px solid #ebd9b5;
-      border-radius: 16px;
-      padding: 20px 16px;
+      border-radius: 14px;
+      padding: 18px 14px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.03);
     }
-    .profile-badge {
+    .person-badge {
       display: inline-block;
-      background: var(--burgundy);
+      background: var(--primary-wine);
       color: var(--gold-light);
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 1px;
       padding: 3px 14px;
       border-radius: 20px;
-      margin-bottom: 8px;
-    }
-    .profile-name {
-      font-family: 'Cinzel', 'Rozha One', serif;
-      font-size: 1.6rem;
-      color: var(--burgundy);
-      font-weight: 700;
       margin-bottom: 6px;
     }
-    .profile-lineage {
-      font-size: 0.88rem;
-      color: #553e36;
-      line-height: 1.65;
+    .person-name-title {
+      font-family: 'Rozha One', 'Cinzel', serif;
+      font-size: 1.55rem;
+      color: var(--primary-wine);
+      margin-bottom: 6px;
     }
-    .profile-lineage strong {
+    .person-desc {
+      font-size: 0.86rem;
+      color: #553e36;
+      line-height: 1.6;
+    }
+    .person-desc strong {
       color: #2b140d;
     }
 
-    .knot-circle {
-      width: 48px;
-      height: 48px;
+    .sang-knot {
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: #ffffff;
       border: 2px solid var(--gold);
-      color: var(--burgundy);
+      color: var(--primary-wine);
       font-family: 'Rozha One', serif;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -437,44 +455,44 @@
     }
 
     /* Pull to Reveal Scroll */
-    .scroll-box {
+    .scroll-outer-box {
       background: linear-gradient(180deg, #f8f1e2 0%, #fffcf5 100%);
       border: 1.5px solid var(--gold);
       border-radius: 18px;
-      padding: 24px 14px;
-      margin-bottom: 24px;
+      padding: 22px 14px;
+      margin-bottom: 22px;
       text-align: center;
     }
-    .scroll-rod {
+    .scroll-wood-rod {
       width: 100%;
       height: 18px;
       background: linear-gradient(90deg, #aa820a 0%, #ffe285 50%, #aa820a 100%);
       border-radius: 9px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .scroll-sheet {
+    .scroll-parchment-sheet {
       background: #fcf6ea;
       border-left: 2px solid #dfc282;
       border-right: 2px solid #dfc282;
       overflow: hidden;
       transition: height 0.75s cubic-bezier(0.2, 0.8, 0.2, 1), padding 0.75s ease;
-      height: 55px;
+      height: 52px;
     }
-    .scroll-sheet.unrolled {
+    .scroll-parchment-sheet.unrolled {
       height: 285px;
       padding: 16px 12px;
     }
-    .scroll-data {
+    .scroll-inner-data {
       opacity: 0;
       transform: translateY(15px);
       transition: opacity 0.5s ease 0.25s, transform 0.5s ease 0.25s;
     }
-    .scroll-sheet.unrolled .scroll-data {
+    .scroll-parchment-sheet.unrolled .scroll-inner-data {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .tassel-container {
+    .tassel-puller {
       cursor: pointer;
       display: inline-block;
       margin-top: -2px;
@@ -485,12 +503,12 @@
       0% { transform: rotate(-4deg); }
       100% { transform: rotate(4deg); }
     }
-    .t-thread { width: 3px; height: 32px; background: var(--burgundy); margin: 0 auto; }
-    .t-bead { width: 12px; height: 12px; background: var(--gold); border-radius: 50%; margin: 0 auto; }
-    .t-skirt { width: 22px; height: 26px; background: var(--burgundy); border-radius: 0 0 10px 10px; margin: 0 auto; border-bottom: 3px solid var(--gold); }
-    .t-label {
+    .t-string { width: 3px; height: 32px; background: var(--primary-wine); margin: 0 auto; }
+    .t-gold-bead { width: 12px; height: 12px; background: var(--gold); border-radius: 50%; margin: 0 auto; }
+    .t-drop { width: 22px; height: 26px; background: var(--primary-wine); border-radius: 0 0 10px 10px; margin: 0 auto; border-bottom: 3px solid var(--gold); }
+    .t-text {
       font-size: 0.8rem;
-      color: var(--burgundy);
+      color: var(--primary-wine);
       font-weight: 700;
       margin-top: 4px;
       display: flex;
@@ -500,121 +518,120 @@
     }
 
     /* Countdown */
-    .cd-row {
+    .countdown-flex {
       display: flex;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       margin-top: 14px;
     }
-    .cd-unit {
-      background: var(--burgundy);
+    .c-box {
+      background: var(--primary-wine);
       border: 1px solid var(--gold);
       border-radius: 10px;
-      padding: 8px 10px;
-      min-width: 58px;
+      padding: 8px 8px;
+      min-width: 56px;
       color: #ffffff;
     }
-    .cd-digits {
+    .c-num {
       font-family: 'Cinzel', serif;
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--gold-bright);
       line-height: 1.1;
     }
-    .cd-text {
-      font-size: 0.65rem;
+    .c-lbl {
+      font-size: 0.62rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: #fcebeb;
     }
 
     /* Events Slider */
-    .events-slider {
+    .events-carousel {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      gap: 14px;
-      padding-bottom: 12px;
+      gap: 12px;
+      padding-bottom: 10px;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
-    .events-slider::-webkit-scrollbar { display: none; }
+    .events-carousel::-webkit-scrollbar { display: none; }
 
     .ev-card {
-      flex: 0 0 85%;
+      flex: 0 0 86%;
       scroll-snap-align: center;
       background: #ffffff;
       border: 1.5px solid #ebd9b5;
       border-radius: 16px;
-      padding: 20px 16px;
+      padding: 18px 14px;
       text-align: center;
       box-shadow: 0 6px 18px rgba(0,0,0,0.05);
     }
-    .ev-tag {
+    .ev-badge {
       display: inline-block;
-      background: var(--burgundy);
+      background: var(--primary-wine);
       color: var(--gold-light);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      padding: 4px 14px;
-      border-radius: 14px;
-      margin-bottom: 12px;
+      padding: 3px 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
     }
-    .ev-icon {
-      width: 54px;
-      height: 54px;
-      margin: 0 auto 10px auto;
+    .ev-icon-img {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 8px auto;
     }
-    .ev-heading {
-      font-family: 'Cinzel', 'Rozha One', serif;
-      font-size: 1.4rem;
-      color: var(--burgundy);
-      font-weight: 700;
-      margin-bottom: 4px;
+    .ev-name {
+      font-family: 'Rozha One', 'Cinzel', serif;
+      font-size: 1.35rem;
+      color: var(--primary-wine);
+      margin-bottom: 2px;
     }
-    .ev-time {
-      font-size: 0.95rem;
+    .ev-time-txt {
+      font-size: 0.9rem;
       font-weight: 700;
       color: var(--gold-dark);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .ev-detail {
+    .ev-desc-txt {
       font-size: 0.85rem;
       color: #553e36;
       line-height: 1.5;
     }
 
     /* Venue Card */
-    .venue-card {
+    .venue-card-wrap {
       background: #ffffff;
       border: 2px solid var(--gold);
       border-radius: 18px;
-      padding: 24px 16px;
+      padding: 22px 14px;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       box-shadow: 0 8px 25px rgba(56, 7, 17, 0.08);
     }
-    .venue-map-frame {
+    .map-frame-box {
       width: 100%;
       height: 180px;
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid #d4af37;
-      margin: 16px 0;
+      margin: 14px 0;
     }
-    .venue-map-frame iframe {
+    .map-frame-box iframe {
       width: 100%;
       height: 100%;
       border: none;
     }
 
-    .btn-nav-gps {
+    .btn-maps-nav {
       background: linear-gradient(135deg, #1b7a37 0%, #115725 100%);
       color: #ffffff;
       border: 1px solid #28a745;
-      padding: 14px 20px;
+      padding: 13px 18px;
       border-radius: 14px;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       font-weight: 700;
       text-decoration: none;
       display: flex;
@@ -624,14 +641,14 @@
       box-shadow: 0 6px 18px rgba(40,167,69,0.35);
       margin-bottom: 10px;
     }
-    .btn-copy-addr {
+    .btn-copy-address {
       width: 100%;
       background: #faf4e8;
-      color: var(--burgundy);
+      color: var(--primary-wine);
       border: 1px solid var(--gold);
-      padding: 12px 20px;
+      padding: 11px 18px;
       border-radius: 14px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
@@ -640,18 +657,18 @@
       gap: 8px;
     }
 
-    /* Contacts */
-    .call-btn-row {
+    /* Calling Helpline */
+    .helpline-pill-row {
       display: flex;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
       margin-top: 10px;
     }
-    .call-pill {
-      background: var(--burgundy);
+    .helpline-pill {
+      background: var(--primary-wine);
       color: var(--gold-light);
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 25px;
       font-size: 0.85rem;
       font-weight: 600;
@@ -662,7 +679,8 @@
       border: 1px solid var(--gold);
     }
 
-    #toast-msg {
+    /* Toast */
+    #toast-bar {
       position: fixed;
       bottom: 24px;
       left: 50%;
@@ -672,7 +690,7 @@
       padding: 10px 24px;
       border-radius: 25px;
       border: 1px solid var(--gold);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 600;
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
       z-index: 2000;
@@ -680,63 +698,184 @@
       transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
       pointer-events: none;
     }
-    #toast-msg.show {
+    #toast-bar.show {
       transform: translateX(-50%) translateY(0);
       opacity: 1;
+    }
+
+    /* =========================================
+       DRAWER / MODAL: WHATSAPP INVITE GENERATOR
+       ========================================= */
+    #generator-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 1, 4, 0.85);
+      backdrop-filter: blur(6px);
+      z-index: 1500;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    #generator-drawer.active {
+      display: flex;
+    }
+
+    .drawer-content {
+      width: 100%;
+      max-width: 440px;
+      max-height: 90vh;
+      background: var(--ivory);
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      padding: 22px 18px;
+      overflow-y: auto;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    .drawer-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary-wine);
+      color: #ffffff;
+      border: 1px solid var(--gold);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .drawer-title {
+      font-family: 'Rozha One', 'Cinzel', serif;
+      font-size: 1.3rem;
+      color: var(--primary-wine);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--gold);
+    }
+    .drawer-label {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #4a2f1b;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .drawer-input {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      border: 1.5px solid #d8be8d;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      background: #ffffff;
+      font-family: inherit;
+    }
+    .drawer-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btn-wa-auto {
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #ffffff;
+      padding: 13px 16px;
+      border-radius: 12px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+    .btn-download-envelope {
+      background: linear-gradient(135deg, var(--gold) 0%, #aa820a 100%);
+      color: #2b040a;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .hidden-canvas {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating Canvas Petals -->
+  <!-- Hidden Canvas for Envelope Picture Export -->
+  <canvas id="export-canvas" width="600" height="850" class="hidden-canvas"></canvas>
+
+  <!-- Falling Petals -->
   <canvas id="petals-canvas"></canvas>
 
-  <!-- Top Action Bar -->
-  <div class="top-actions-bar">
-    <a href="generator.html" class="btn-create-invites" title="नया निमंत्रण बनाएं">
+  <!-- Floating Sticky Action Bar -->
+  <div class="sticky-top-bar">
+    <button class="btn-generator-drawer" onclick="openGeneratorDrawer()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
       <span>Create WhatsApp Invite</span>
-    </a>
+    </button>
 
-    <button id="music-pill" class="music-pill-btn" title="संगीत चालू / बंद करें">
-      <div class="music-wave">
-        <div class="wave-line"></div>
-        <div class="wave-line"></div>
-        <div class="wave-line"></div>
+    <button id="music-btn" class="btn-music-toggle" title="संगीत चालू / बंद करें">
+      <div class="equalizer-bars">
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
       </div>
       <span>Kudmayi</span>
     </button>
   </div>
 
-  <div id="toast-msg">Address copied to clipboard!</div>
+  <div id="toast-bar">Notice</div>
 
-  <!-- Viewport -->
-  <div class="main-viewport">
+  <!-- Mobile App Viewport -->
+  <div class="app-screen">
 
     <!-- =========================================
-         SCREEN 1: LUXURY ENVELOPE OPENING
+         SCREEN 1: ROYAL ENVELOPE (PROPER BIG FORMAT)
          ========================================= -->
     <div id="envelope-screen">
       <div class="envelope-box" id="open-box-trigger">
-        <div class="env-tag">Wedding Invitation • विवाह निमंत्रण</div>
-        <div class="env-shloka">॥ श्री गणेशाय नमः ॥ • ॥ श्री विन्ध्यवासिनी देव्यै नमः ॥</div>
+        
+        <!-- Auspicious Shloka on Top -->
+        <div class="env-top-shloka">॥ श्री गणेशाय नमः ॥ • ॥ श्री विन्ध्यवासिनी देव्यै नमः ॥</div>
 
-        <!-- Enhanced Real 3D Golden Ganesha Medallion -->
-        <div class="ganesha-frame">
-          <img src="assets/icons/real_ganesha.png" alt="Lord Ganesha">
+        <!-- Groom & Bride Name ON TOP Prominently -->
+        <h1 class="env-couple-header">शिवानी संग सौरभ</h1>
+        <div class="env-couple-english">SHIVANI & SAURABH • WEDDING INVITATION</div>
+
+        <!-- Golden Ganesha Medallion -->
+        <div class="env-ganesh-ring">
+          <img src="assets/icons/ganesh_gold.svg" alt="Lord Ganesha">
         </div>
 
-        <h1 class="env-title">Shivani & Saurabh</h1>
-        <div class="env-sub-date">Saturday, 05 December 2026 • Mirzapur</div>
+        <!-- Date Pill -->
+        <div class="env-date-tag">शनिवार, 05 दिसम्बर 2026 • Saturday, 05 Dec 2026</div>
 
-        <!-- Guest Space on Envelope (Spacious Calligraphy Area) -->
-        <div class="env-guest-card">
-          <span class="env-guest-title">प्रतिष्ठा में (Specially Invited):</span>
-          <div class="env-guest-name" id="env-guest-name">समस्त स्नेही स्वजन</div>
-          <div class="env-guest-addr" id="env-guest-addr">एवं सपरिवार</div>
+        <!-- Guest Name In Proper Big Format -->
+        <div class="env-guest-container">
+          <span class="guest-header-label">प्रतिष्ठा में (Specially Invited):</span>
+          <div class="guest-name-big" id="env-guest-name">समस्त स्नेही स्वजन</div>
+          <div class="guest-addr-clean" id="env-guest-addr">एवं सपरिवार</div>
         </div>
 
-        <button class="btn-open-card" id="open-btn">
+        <button class="btn-open-envelope" id="open-btn">
           <span>निमंत्रण पत्र खोलें (Open Invitation)</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
@@ -744,24 +883,24 @@
     </div>
 
     <!-- =========================================
-         INSIDE INVITATION MAIN BODY
+         INSIDE INVITATION (100% RESPONSIVE)
          ========================================= -->
-    <div class="invite-container">
+    <div class="card-body-content">
 
-      <!-- Guest Welcome Card -->
-      <div class="welcome-card">
-        <div class="welcome-card-sub">सादर आमंत्रण • Cordially Welcoming</div>
-        <div class="welcome-card-name" id="page-guest-name">समस्त स्नेही स्वजन</div>
-        <div class="welcome-card-addr" id="page-guest-addr">सपरिवार • With Your Gracious Presence</div>
+      <!-- Guest Welcome Banner -->
+      <div class="guest-top-banner">
+        <div class="gtb-sub">सादर आमंत्रण • Cordially Welcoming</div>
+        <div class="gtb-name" id="page-guest-name">समस्त स्नेही स्वजन</div>
+        <div class="gtb-addr" id="page-guest-addr">सपरिवार • With Your Gracious Presence</div>
       </div>
 
-      <!-- Sacred Invocations & Blessings -->
-      <div class="section-card">
-        <div class="ganesha-frame" style="width: 72px; height: 72px; margin-bottom: 8px;">
-          <img src="assets/icons/real_ganesha.png" alt="Ganesh">
+      <!-- Sacred Blessings -->
+      <div class="royal-card">
+        <div class="env-ganesh-ring" style="width: 72px; height: 72px; margin-bottom: 8px;">
+          <img src="assets/icons/ganesh_gold.svg" alt="Ganesh">
         </div>
 
-        <div class="shloka-box">
+        <div class="shloka-frame">
           <div>
             ॥ श्री गणेशाय नमः ॥<br>
             वक्रतुण्ड महाकाय, सूर्यकोटि समप्रभः।<br>
@@ -781,31 +920,31 @@
       </div>
 
       <!-- The Couple (Shivani & Saurabh) -->
-      <div class="section-card">
-        <div class="bilingual-header">
-          <div class="hi-title">शुभ विवाह</div>
-          <div class="en-title">Wedding Celebration</div>
+      <div class="royal-card">
+        <div class="card-header-duo">
+          <div class="hi">शुभ विवाह</div>
+          <div class="en">Wedding Celebration</div>
         </div>
 
-        <div class="couple-stack">
+        <div class="couple-column">
           <!-- Bride -->
-          <div class="profile-card">
-            <span class="profile-badge">वधु (Bride)</span>
-            <div class="profile-name">शिवानी विश्वकर्मा</div>
-            <div class="profile-lineage">
+          <div class="person-card">
+            <span class="person-badge">वधु (Bride)</span>
+            <div class="person-name-title">शिवानी विश्वकर्मा</div>
+            <div class="person-desc">
               सुपौत्री: <strong>स्व० जलेबी लाल विश्वकर्मा</strong> एवं <strong>श्यामा देवी</strong><br>
               सुपुत्री: <strong>श्री जशवन्त लाल विश्वकर्मा</strong> एवं <strong>श्रीमती उषा देवी</strong><br>
               निवास: ग्राम- बरईपुर, पो०- राजापुर, <strong>मीरजापुर (उ०प्र०)</strong>
             </div>
           </div>
 
-          <div class="knot-circle">संग</div>
+          <div class="sang-knot">संग</div>
 
           <!-- Groom -->
-          <div class="profile-card">
-            <span class="profile-badge">वर (Groom)</span>
-            <div class="profile-name">सौरभ विश्वकर्मा</div>
-            <div class="profile-lineage">
+          <div class="person-card">
+            <span class="person-badge">वर (Groom)</span>
+            <div class="person-name-title">सौरभ विश्वकर्मा</div>
+            <div class="person-desc">
               सुपौत्र: <strong>स्व० पंचम राम विश्वकर्मा</strong> एवं <strong>स्व० महदेई देवी</strong><br>
               सुपुत्र: <strong>श्री जयप्रकाश विश्वकर्मा</strong> एवं <strong>श्रीमती शशि कला देवी</strong><br>
               निवास: मरजाद पट्टी, मेन रोड (प्रकाश जरनल स्टोर), <strong>भदोही (उ०प्र०)</strong>
@@ -815,51 +954,51 @@
       </div>
 
       <!-- Pull to Reveal Save the Date Scroll -->
-      <div class="scroll-box">
-        <div class="bilingual-header" style="margin-bottom: 12px;">
-          <div class="hi-title">तिथि व शुभ मुहूर्त</div>
-          <div class="en-title">Save The Date • 05 Dec 2026</div>
+      <div class="scroll-outer-box">
+        <div class="card-header-duo" style="margin-bottom: 10px;">
+          <div class="hi">तिथि व शुभ मुहूर्त</div>
+          <div class="en">Save The Date • 05 Dec 2026</div>
         </div>
-        <div style="font-size: 0.82rem; color: var(--gold-dark); margin-bottom: 14px; font-weight: 600;">
+        <div style="font-size: 0.82rem; color: var(--gold-dark); margin-bottom: 12px; font-weight: 600;">
           शादी की पावन तिथि देखने के लिए नीचे खिंचें या टैप करें
         </div>
 
         <div style="max-width: 350px; margin: 0 auto; position: relative;">
-          <div class="scroll-rod"></div>
+          <div class="scroll-wood-rod"></div>
 
-          <div class="scroll-sheet" id="parchment-sheet">
-            <div class="scroll-data">
-              <div style="font-size: 0.78rem; letter-spacing: 2px; color: #8c6d1d; text-transform: uppercase;">॥ पावन परिणयोत्सव ॥</div>
-              <div style="font-family: 'Cinzel', 'Rozha One', serif; font-size: 1.85rem; color: var(--burgundy); font-weight: 800; margin: 4px 0;">
+          <div class="scroll-parchment-sheet" id="parchment-sheet">
+            <div class="scroll-inner-data">
+              <div style="font-size: 0.76rem; letter-spacing: 2px; color: #8c6d1d; text-transform: uppercase;">॥ पावन परिणयोत्सव ॥</div>
+              <div style="font-family: 'Cinzel', 'Rozha One', serif; font-size: 1.85rem; color: var(--primary-wine); font-weight: 800; margin: 4px 0;">
                 05 दिसम्बर 2026
               </div>
-              <div style="font-size: 0.95rem; font-weight: 600; color: #553e36; margin-bottom: 10px;">
+              <div style="font-size: 0.95rem; font-weight: 600; color: #553e36; margin-bottom: 8px;">
                 शनिवार (Saturday) • शुभ विवाह एवं पाणिग्रहण संस्कार
               </div>
-              <div style="font-size: 0.88rem; color: #553e36; margin-bottom: 12px;">
+              <div style="font-size: 0.86rem; color: #553e36; margin-bottom: 12px;">
                 स्थान: <strong>"शगुन लॉन"</strong>, जंगीरोड, मीरजापुर
               </div>
 
               <!-- Live Countdown -->
-              <div style="font-size: 0.75rem; letter-spacing: 1.5px; color: var(--burgundy); font-weight: 700; text-transform: uppercase;">
+              <div style="font-size: 0.74rem; letter-spacing: 1.5px; color: var(--primary-wine); font-weight: 700; text-transform: uppercase;">
                 शुभ विवाह में शेष समय (Countdown):
               </div>
-              <div class="cd-row">
-                <div class="cd-unit"><div class="cd-digits" id="cd-days">--</div><div class="cd-text">दिन (Days)</div></div>
-                <div class="cd-unit"><div class="cd-digits" id="cd-hours">--</div><div class="cd-text">घंटे (Hrs)</div></div>
-                <div class="cd-unit"><div class="cd-digits" id="cd-mins">--</div><div class="cd-text">मिनट (Min)</div></div>
-                <div class="cd-unit"><div class="cd-digits" id="cd-secs">--</div><div class="cd-text">सेकंड (Sec)</div></div>
+              <div class="countdown-flex">
+                <div class="c-box"><div class="c-num" id="cd-days">--</div><div class="c-lbl">Days</div></div>
+                <div class="c-box"><div class="c-num" id="cd-hours">--</div><div class="c-lbl">Hours</div></div>
+                <div class="c-box"><div class="c-num" id="cd-mins">--</div><div class="c-lbl">Mins</div></div>
+                <div class="c-box"><div class="c-num" id="cd-secs">--</div><div class="c-lbl">Secs</div></div>
               </div>
             </div>
           </div>
 
-          <div class="scroll-rod"></div>
+          <div class="scroll-wood-rod"></div>
 
-          <div class="tassel-container" id="tassel-trigger">
-            <div class="t-thread"></div>
-            <div class="t-bead"></div>
-            <div class="t-skirt"></div>
-            <div class="t-label">
+          <div class="tassel-puller" id="tassel-trigger">
+            <div class="t-string"></div>
+            <div class="t-gold-bead"></div>
+            <div class="t-drop"></div>
+            <div class="t-text">
               <span>शाही फरमान खोलें (Pull to Reveal)</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
             </div>
@@ -867,65 +1006,63 @@
         </div>
       </div>
 
-      <!-- Festivities Carousel -->
-      <div class="section-card">
-        <div class="bilingual-header">
-          <div class="hi-title">मांगलिक कार्यक्रम</div>
-          <div class="en-title">Wedding Festivities & Timeline</div>
+      <!-- Festivities Timeline -->
+      <div class="royal-card">
+        <div class="card-header-duo">
+          <div class="hi">मांगलिक कार्यक्रम</div>
+          <div class="en">Wedding Festivities & Timeline</div>
         </div>
 
-        <div class="events-slider">
-          
-          <!-- Event 1 -->
+        <div class="events-carousel">
+          <!-- 1 -->
           <div class="ev-card">
-            <span class="ev-tag">प्रथम दिवस • Day 1</span>
-            <img src="assets/icons/kalash.svg" alt="Matimangara" class="ev-icon">
-            <div class="ev-heading">मतिमंगरा (Matimangara)</div>
-            <div class="ev-time">03 दिसम्बर 2026, गुरुवार</div>
-            <div class="ev-detail">कुलदेवता पूजन एवं शुभ मांगलिक कार्यों का शुभारंभ।</div>
-            <div style="margin-top: 10px; font-size: 0.78rem; color: #795548; font-weight: 600;">पहनावा: पारंपरिक (Traditional)</div>
+            <span class="ev-badge">प्रथम दिवस • Day 1</span>
+            <img src="assets/icons/kalash.svg" alt="Matimangara" class="ev-icon-img">
+            <div class="ev-name">मतिमंगरा</div>
+            <div class="ev-time-txt">03 दिसम्बर 2026, गुरुवार</div>
+            <div class="ev-desc-txt">कुलदेवता पूजन एवं शुभ मांगलिक कार्यों का शुभारंभ।</div>
+            <div style="margin-top: 8px; font-size: 0.76rem; color: #795548; font-weight: 600;">पहनावा: पारंपरिक (Traditional)</div>
           </div>
 
-          <!-- Event 2 -->
+          <!-- 2 -->
           <div class="ev-card">
-            <span class="ev-tag">द्वितीय दिवस • Day 2</span>
-            <img src="assets/icons/shehnai.svg" alt="Bhattwan" class="ev-icon">
-            <div class="ev-heading">भत्तवान एवं हल्दी (Haldi)</div>
-            <div class="ev-time">04 दिसम्बर 2026, शुक्रवार</div>
-            <div class="ev-detail">मांगलिक हल्दी, भत्तवान स्नेह भोज एवं मधुर लोकगीत संगीत।</div>
-            <div style="margin-top: 10px; font-size: 0.78rem; color: #b78103; font-weight: 600;">पहनावा: पीतांबरी (Festive Yellow)</div>
+            <span class="ev-badge">द्वितीय दिवस • Day 2</span>
+            <img src="assets/icons/shehnai.svg" alt="Bhattwan" class="ev-icon-img">
+            <div class="ev-name">भत्तवान एवं हल्दी</div>
+            <div class="ev-time-txt">04 दिसम्बर 2026, शुक्रवार</div>
+            <div class="ev-desc-txt">मांगलिक हल्दी, भत्तवान स्नेह भोज एवं मधुर लोकगीत संगीत।</div>
+            <div style="margin-top: 8px; font-size: 0.76rem; color: #b78103; font-weight: 600;">पहनावा: पीतांबरी (Festive Yellow)</div>
           </div>
 
-          <!-- Event 3 -->
-          <div class="ev-card" style="border: 2px solid var(--burgundy);">
-            <span class="ev-tag" style="background: #871325;">मुख्य उत्सव • Wedding Day</span>
-            <img src="assets/icons/mandap.svg" alt="Vivah" class="ev-icon">
-            <div class="ev-heading" style="color: #871325;">शुभ विवाह एवं बारात</div>
-            <div class="ev-time">05 दिसम्बर 2026, शनिवार</div>
-            <div class="ev-detail">शुभ बारात आगमन, द्वारपूजा, जयमाल एवं पवित्र पाणिग्रहण संस्कार।</div>
-            <div style="margin-top: 10px; font-size: 0.78rem; color: #871325; font-weight: 600;">स्थान: "शगुन लॉन", मीरजापुर</div>
+          <!-- 3 -->
+          <div class="ev-card" style="border: 2px solid var(--primary-wine);">
+            <span class="ev-badge" style="background: #871325;">मुख्य उत्सव • Wedding Day</span>
+            <img src="assets/icons/mandap.svg" alt="Vivah" class="ev-icon-img">
+            <div class="ev-name" style="color: #871325;">शुभ विवाह एवं बारात</div>
+            <div class="ev-time-txt">05 दिसम्बर 2026, शनिवार</div>
+            <div class="ev-desc-txt">शुभ बारात आगमन, द्वारपूजा, जयमाल एवं पवित्र पाणिग्रहण संस्कार।</div>
+            <div style="margin-top: 8px; font-size: 0.76rem; color: #871325; font-weight: 600;">स्थान: "शगुन लॉन", मीरजापुर</div>
           </div>
 
-          <!-- Event 4 -->
+          <!-- 4 -->
           <div class="ev-card">
-            <span class="ev-tag">चतुर्थ दिवस • Day 4</span>
-            <img src="assets/icons/peacock.svg" alt="Vidai" class="ev-icon">
-            <div class="ev-heading">विदाई (Vidai Ceremony)</div>
-            <div class="ev-time">06 दिसम्बर 2026, रविवार</div>
-            <div class="ev-detail">नवदम्पति को शुभाशीर्वाद एवं मंगलमय विदाई बेला।</div>
-            <div style="margin-top: 10px; font-size: 0.78rem; color: #795548; font-weight: 600;">मंगलमय आशीर्वाद</div>
+            <span class="ev-badge">चतुर्थ दिवस • Day 4</span>
+            <img src="assets/icons/peacock.svg" alt="Vidai" class="ev-icon-img">
+            <div class="ev-name">विदाई समारोह</div>
+            <div class="ev-time-txt">06 दिसम्बर 2026, रविवार</div>
+            <div class="ev-desc-txt">नवदम्पति को शुभाशीर्वाद एवं मंगलमय विदाई बेला।</div>
+            <div style="margin-top: 8px; font-size: 0.76rem; color: #795548; font-weight: 600;">मंगलमय आशीर्वाद</div>
           </div>
-
         </div>
       </div>
 
       <!-- Venue & Navigation -->
-      <div class="venue-card">
-        <div class="bilingual-header">
-          <div class="hi-title">कार्यक्रम स्थल</div>
-          <div class="en-title">Wedding Venue & GPS Navigation</div>
+      <div class="venue-card-wrap">
+        <div class="card-header-duo">
+          <div class="hi">कार्यक्रम स्थल</div>
+          <div class="en">Wedding Venue & GPS Navigation</div>
         </div>
-        <div style="font-family: 'Cinzel', 'Rozha One', serif; font-size: 1.6rem; color: var(--burgundy); font-weight: 700; margin-bottom: 4px;">
+        <div style="font-family: 'Cinzel', 'Rozha One', serif; font-size: 1.6rem; color: var(--primary-wine); font-weight: 700; margin-bottom: 4px;">
           "शगुन लॉन" (Shagun Lawn)
         </div>
         <div style="font-size: 0.92rem; color: #4a342c; line-height: 1.6;">
@@ -933,7 +1070,7 @@
           <strong>मीरजापुर, उत्तर प्रदेश</strong>
         </div>
 
-        <div class="venue-map-frame">
+        <div class="map-frame-box">
           <iframe 
             src="https://maps.google.com/maps?q=Shagun+Lawn+Jangi+Road+Mirzapur&t=&z=15&ie=UTF8&iwloc=&output=embed"
             loading="lazy"
@@ -944,32 +1081,32 @@
         <a href="https://maps.google.com/?q=Shagun+Lawn+Jangi+Road+Mirzapur" 
            target="_blank" 
            rel="noopener noreferrer" 
-           class="btn-nav-gps">
+           class="btn-maps-nav">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
           <span>गूगल मैप्स पर रास्ता देखें (Start Navigation)</span>
         </a>
 
-        <button class="btn-copy-addr" id="copy-addr-btn">
+        <button class="btn-copy-address" id="copy-addr-btn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           <span>स्थान का पता कॉपी करें (Copy Address)</span>
         </button>
       </div>
 
-      <!-- Family & Inviters -->
-      <div class="section-card">
-        <div class="bilingual-header">
-          <div class="hi-title">दर्शनाभिलाषी</div>
-          <div class="en-title">With Best Compliments</div>
+      <!-- Family & Helpline -->
+      <div class="royal-card">
+        <div class="card-header-duo">
+          <div class="hi">दर्शनाभिलाषी</div>
+          <div class="en">With Best Compliments</div>
         </div>
-        <div style="font-size: 0.92rem; color: #553e36; line-height: 1.7; margin-bottom: 18px;">
+        <div style="font-size: 0.92rem; color: #553e36; line-height: 1.7; margin-bottom: 16px;">
           सत्यम् विश्वकर्मा, शिवम् विश्वकर्मा,<br>
           सुन्दरम् विश्वकर्मा, प्रितम विश्वकर्मा<br>
           एवं समस्त विश्वकर्मा परिवार
         </div>
 
-        <div class="bilingual-header" style="margin-top: 14px;">
-          <div class="hi-title">विनीत</div>
-          <div class="en-title">Cordially Inviting</div>
+        <div class="card-header-duo" style="margin-top: 10px;">
+          <div class="hi">विनीत</div>
+          <div class="en">Cordially Inviting</div>
         </div>
         <div style="font-size: 0.92rem; color: #553e36; line-height: 1.7;">
           <strong>श्री जशवन्त लाल विश्वकर्मा</strong><br>
@@ -977,15 +1114,15 @@
           ग्राम- बरईपुर, पो०- राजापुर, मीरजापुर
         </div>
 
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--burgundy); text-transform: uppercase; margin-top: 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-wine); text-transform: uppercase; margin-top: 16px;">
           सम्पर्क सूत्र (Direct Calling Helpline)
         </div>
-        <div class="call-btn-row">
-          <a href="tel:6387290280" class="call-pill">
+        <div class="helpline-pill-row">
+          <a href="tel:6387290280" class="helpline-pill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             <span>6387290280</span>
           </a>
-          <a href="tel:8299723184" class="call-pill">
+          <a href="tel:8299723184" class="helpline-pill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             <span>8299723184</span>
           </a>
@@ -994,12 +1131,50 @@
 
       <!-- Footer -->
       <div style="text-align: center; padding: 20px 10px; color: #795548; font-size: 0.85rem; line-height: 1.6;">
-        <div style="font-family: 'Cinzel', serif; font-size: 0.98rem; color: var(--burgundy); font-weight: 700; margin-bottom: 4px;">
+        <div style="font-family: 'Cinzel', serif; font-size: 0.98rem; color: var(--primary-wine); font-weight: 700; margin-bottom: 4px;">
           विश्वकर्मा परिवार, मीरजापुर
         </div>
         <div>आपकी गरिमामयी उपस्थिति नवदम्पति के लिए परम आशीर्वाद होगी।</div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- =========================================
+       GENERATOR DRAWER / MODAL
+       ========================================= -->
+  <div id="generator-drawer">
+    <div class="drawer-content">
+      <div class="drawer-close-btn" onclick="closeGeneratorDrawer()">&times;</div>
+      <div class="drawer-title">नया निमंत्रण बनाएं (Send via WhatsApp)</div>
+
+      <label class="drawer-label">अतिथि का नाम (प्रतिष्ठा में, श्री...): *</label>
+      <input type="text" id="dwGuestName" class="drawer-input" placeholder="उदा: श्री रमेश कुमार विश्वकर्मा जी एवं परिवार" value="श्री रमेश कुमार विश्वकर्मा जी एवं परिवार">
+
+      <label class="drawer-label">शहर / पता (City / Address):</label>
+      <input type="text" id="dwGuestAddr" class="drawer-input" placeholder="उदा: वाराणसी / मीरजापुर" value="वाराणसी, उत्तर प्रदेश">
+
+      <label class="drawer-label">व्हाट्सएप मोबाइल नंबर (WhatsApp Phone Number):</label>
+      <input type="tel" id="dwGuestPhone" class="drawer-input" placeholder="10 अंक (उदा: 9876543210)">
+
+      <div class="drawer-actions">
+        <!-- AUTOMATIC DIRECT SEND BUTTON -->
+        <button class="btn-wa-auto" onclick="sendAutoWhatsApp()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          <span>सीधे उस नंबर पर व्हाट्सएप भेजें</span>
+        </button>
+
+        <!-- Download Picture -->
+        <button class="btn-download-envelope" onclick="downloadCustomEnvelopeImage()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>लिफाफा कार्ड फोटो डाउनलोड करें (PNG)</span>
+        </button>
+
+        <button class="btn-copy-address" onclick="copyPersonalizedLink()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>व्यक्तिगत लिंक कॉपी करें</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1023,16 +1198,25 @@
     document.getElementById('page-guest-name').textContent = guestName;
     document.getElementById('page-guest-addr').textContent = guestAddr;
 
-    // 2. Audio Engine (Kudmayi song on continuous repeat loop)
+    if (guestParam) {
+      document.getElementById('dwGuestName').value = guestName;
+    }
+    if (addrParam) {
+      document.getElementById('dwGuestAddr').value = guestAddr;
+    }
+
+    // 2. Audio Engine Setup (Kudmayi Song Looping)
     const weddingAudio = new RoyalWeddingAudio();
-    const musicBtn = document.getElementById('music-pill');
+    const musicBtn = document.getElementById('music-btn');
 
     musicBtn.addEventListener('click', () => {
       const isPlaying = weddingAudio.toggle();
       if (isPlaying) {
         musicBtn.classList.add('playing');
+        showToast("संगीत चालू है 🎵");
       } else {
         musicBtn.classList.remove('playing');
+        showToast("संगीत बंद किया गया");
       }
     });
 
@@ -1044,7 +1228,7 @@
     function openEnvelope() {
       envScreen.classList.add('opened');
       
-      // Start Kudmayi song
+      // Start Kudmayi song on direct user tap
       weddingAudio.play();
       musicBtn.classList.add('playing');
 
@@ -1076,7 +1260,7 @@
       if (isScrollRevealed) return;
       isScrollRevealed = true;
       parchment.classList.add('unrolled');
-      tasselTrigger.querySelector('.t-label span').textContent = 'शुभ विवाह: 05 दिसम्बर 2026';
+      tasselTrigger.querySelector('.t-text span').textContent = 'शुभ विवाह: 05 दिसम्बर 2026';
       
       if (typeof confetti === 'function') {
         confetti({
@@ -1096,7 +1280,7 @@
       }
     });
 
-    // 5. Wedding Countdown Timer (Target: 05 December 2026, 18:00 IST)
+    // 5. Countdown (Target: 05 Dec 2026, 18:00 IST)
     const weddingDate = new Date('2026-12-05T18:00:00+05:30').getTime();
 
     function updateCountdown() {
@@ -1124,10 +1308,8 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // 6. Copy Address
+    // 6. Copy Venue Address
     const copyBtn = document.getElementById('copy-addr-btn');
-    const toast = document.getElementById('toast-msg');
-
     copyBtn.addEventListener('click', () => {
       const fullAddress = `"शगुन लॉन", पापुलर हास्पिटल के बगल में, जंगीरोड, मीरजापुर, उत्तर प्रदेश`;
       navigator.clipboard.writeText(fullAddress).then(() => {
@@ -1137,15 +1319,193 @@
       });
     });
 
-    function showToast(text) {
-      toast.textContent = text;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2500);
+    // 7. Drawer Modal Logic
+    function openGeneratorDrawer() {
+      document.getElementById('generator-drawer').classList.add('active');
+    }
+    function closeGeneratorDrawer() {
+      document.getElementById('generator-drawer').classList.remove('active');
     }
 
-    // 7. Rose Petals Canvas
+    // 8. AUTOMATIC DIRECT WHATSAPP SENDER TO THE EXACT ENTERED PHONE NUMBER
+    function sendAutoWhatsApp() {
+      const gName = document.getElementById('dwGuestName').value.trim() || 'समस्त स्नेही स्वजन';
+      const gAddr = document.getElementById('dwGuestAddr').value.trim() || 'एवं सपरिवार';
+      let phone = document.getElementById('dwGuestPhone').value.replace(/[^0-9]/g, '');
+
+      // Base URL always stays on this website root
+      const baseUrl = window.location.origin + window.location.pathname.replace(/\/$/, '');
+      const inviteUrl = `${baseUrl}?to=${encodeURIComponent(gName)}&addr=${encodeURIComponent(gAddr)}`;
+
+      const msg = 
+`✨ *WEDDING INVITATION* ✨
+*॥ श्री गणेशाय नमः ॥ • ॥ श्री विन्ध्यवासिनी देव्यै नमः ॥*
+
+स्नेही स्वजन,
+*${gName}*
+${gAddr ? `(${gAddr})\n` : ''}
+जगत जननी माँ विन्ध्यवासिनी देवी जी की असीम अनुकम्पा एवं पूज्य पूर्वजों के आशीर्वाद से हमारे परिवार में:
+
+👰 *शिवानी* (सुपुत्री: श्री जशवन्त लाल विश्वकर्मा)
+💍 *संग परिणय सूत्र में बंधेंगे*
+🤵 *सौरभ* (सुपुत्र: श्री जयप्रकाश विश्वकर्मा)
+
+🗓️ *शुभ विवाह तिथि:* शनिवार, 05 दिसम्बर 2026
+📍 *कार्यक्रम स्थल:* "शगुन लॉन", पापुलर हास्पिटल के बगल में, जंगीरोड, मीरजापुर (उ०प्र०)
+
+🌸 *कृपया नीचे दिए गए लिंक को खोलकर अपना व्यक्तिगत निमंत्रण पत्र, कुड़माई संगीत व गूगल मैप्स नेविगेशन देखें:* 👇
+🔗 ${inviteUrl}
+
+*विनीत:*
+जशवन्त लाल विश्वकर्मा, बिन्द्रेश कुमार विश्वकर्मा
+एवं समस्त विश्वकर्मा परिवार, मीरजापुर
+📞 6387290280, 8299723184`;
+
+      let waUrl = '';
+      if (phone.length >= 10) {
+        // Automatically format with country code 91 if 10 digits
+        const fullPhone = phone.length === 10 ? '91' + phone : phone;
+        waUrl = `https://api.whatsapp.com/send?phone=${fullPhone}&text=${encodeURIComponent(msg)}`;
+      } else {
+        waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      }
+
+      window.location.href = waUrl; // Automatically open WhatsApp directly!
+    }
+
+    // 9. Download Envelope Picture
+    function downloadCustomEnvelopeImage() {
+      const gName = document.getElementById('dwGuestName').value.trim() || 'Guest';
+      const gAddr = document.getElementById('dwGuestAddr').value.trim() || 'सपरिवार';
+      
+      const canvas = document.getElementById('export-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 600, 850);
+
+      // Card Background
+      ctx.fillStyle = '#FFFDF7';
+      ctx.fillRect(0, 0, 600, 850);
+
+      ctx.strokeStyle = '#D4AF37';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(20, 20, 560, 810);
+
+      ctx.strokeStyle = '#B38B22';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([5, 4]);
+      ctx.strokeRect(28, 28, 544, 794);
+      ctx.setLineDash([]);
+
+      // Top Couple Names ON TOP
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#5A0C1B';
+      ctx.font = 'bold 22px "Rozha One", serif';
+      ctx.fillText('॥ श्री गणेशाय नमः ॥ • ॥ श्री विन्ध्यवासिनी देव्यै नमः ॥', 300, 65);
+
+      ctx.font = 'bold 32px "Rozha One", serif';
+      ctx.fillText('शिवानी संग सौरभ', 300, 110);
+      ctx.font = '14px "Cinzel", sans-serif';
+      ctx.fillStyle = '#8C6D1D';
+      ctx.fillText('SHIVANI & SAURABH • WEDDING INVITATION', 300, 135);
+
+      // Center Golden Ring
+      ctx.beginPath();
+      ctx.arc(300, 240, 60, 0, Math.PI * 2);
+      ctx.fillStyle = '#5A0C1B';
+      ctx.fill();
+      ctx.strokeStyle = '#D4AF37';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Wedding Date on Envelope
+      ctx.fillStyle = '#7A0E23';
+      ctx.font = 'bold 20px "Cinzel", "Rozha One", serif';
+      ctx.fillText('शनिवार, 05 दिसम्बर 2026', 300, 340);
+      ctx.font = '15px "Montserrat", sans-serif';
+      ctx.fillStyle = '#8C6D1D';
+      ctx.fillText('Saturday, 05 December 2026', 300, 365);
+
+      // GUEST NAME IN PROPER BIG FORMAT
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#5A0C1B';
+      ctx.font = 'bold 18px "Cinzel", "Rozha One", serif';
+      ctx.fillText('प्रतिष्ठा में (Specially Invited):', 80, 440);
+
+      ctx.font = 'bold 42px "Rozha One", serif';
+      ctx.fillText('श्री', 60, 510);
+
+      // Big Calligraphy Lines
+      ctx.strokeStyle = '#BCAAA4';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+
+      ctx.beginPath();
+      ctx.moveTo(120, 510);
+      ctx.lineTo(540, 510);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(60, 570);
+      ctx.lineTo(540, 570);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Inscribed Guest Name in BIG format
+      ctx.fillStyle = '#3A0711';
+      ctx.font = 'bold 24px "Cinzel", "Rozha One", serif';
+      ctx.fillText(gName, 130, 502);
+
+      // Inscribed Address
+      ctx.fillStyle = '#5D4037';
+      ctx.font = '18px "Montserrat", sans-serif';
+      ctx.fillText(gAddr, 70, 562);
+
+      // Sender Info
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#5A0C1B';
+      ctx.font = 'bold 16px "Rozha One", serif';
+      ctx.fillText('प्रेषक :-', 60, 650);
+
+      ctx.font = 'bold 18px "Rozha One", serif';
+      ctx.fillText('जशवन्त लाल विश्वकर्मा • बिन्द्रेश कुमार विश्वकर्मा', 60, 680);
+      ctx.font = '14px "Montserrat", sans-serif';
+      ctx.fillStyle = '#4E342E';
+      ctx.fillText('ग्राम- बरईपुर, पो०- राजापुर, मीरजापुर (उ०प्र०)', 60, 705);
+      ctx.fillText('📞 मो०- 6387290280, 8299723184', 60, 728);
+
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 14px "Montserrat", sans-serif';
+      ctx.fillStyle = '#7A0E23';
+      ctx.fillText('स्थान: "शगुन लॉन", पापुलर हास्पिटल के बगल में, जंगीरोड, मीरजापुर', 300, 790);
+
+      const link = document.createElement('a');
+      link.download = `Wedding_Envelope_${gName.replace(/\s+/g, '_')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast("लिफाफा फोटो डाउनलोड हो गया!");
+    }
+
+    function copyPersonalizedLink() {
+      const gName = document.getElementById('dwGuestName').value.trim() || 'समस्त स्नेही स्वजन';
+      const gAddr = document.getElementById('dwGuestAddr').value.trim() || 'एवं सपरिवार';
+      const baseUrl = window.location.origin + window.location.pathname.replace(/\/$/, '');
+      const inviteUrl = `${baseUrl}?to=${encodeURIComponent(gName)}&addr=${encodeURIComponent(gAddr)}`;
+
+      navigator.clipboard.writeText(inviteUrl).then(() => {
+        showToast("व्यक्तिगत लिंक कॉपी हो गया!");
+      });
+    }
+
+    function showToast(text) {
+      const t = document.getElementById('toast-bar');
+      t.textContent = text;
+      t.classList.add('show');
+      setTimeout(() => {
+        t.classList.remove('show');
+      }, 2600);
+    }
+
+    // 10. Rose Petals Canvas
     const canvas = document.getElementById('petals-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
